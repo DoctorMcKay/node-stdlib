@@ -8,6 +8,9 @@
 		"type": "git",
 		"url": "https://github.com/DoctorMcKay/node-stdlib"
 	},
+	"scripts": {
+		"test": "node test.js"
+	},
 	"engines": {
 		"node": ">=6.0.0"
 	}

@@ -18,15 +18,18 @@ setTimeout(() => {
 	checkCacheKey(cache, "six", 6);
 	checkCacheKey(cache, "seven", 7);
 
-	cache.get("two");
 	setTimeout(() => {
-		cache.gc();
-		checkCacheKey(cache, "one", null);
-		checkCacheKey(cache, "two", 2);
+		cache.get("two");
 
-		cache.delete("six");
-		checkCacheKey(cache, "six", null);
-	}, 10);
+		setTimeout(() => {
+			cache.gc();
+			checkCacheKey(cache, "one", null);
+			checkCacheKey(cache, "two", 2);
+
+			cache.delete("six");
+			checkCacheKey(cache, "six", null);
+		}, 50);
+	}, 50);
 }, 50);
 
 function checkCacheKey(cache, key, expectedValue) {

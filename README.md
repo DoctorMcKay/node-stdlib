@@ -95,3 +95,15 @@ Removes the top item from the stack and returns it. Returns `null` if the stack 
 ### length
 
 A property indicating how many items are on the stack.
+
+## IPv4
+
+### intToString(ipInt)
+- `ipInt` - An integer-format IPv4 address
+
+Returns a dotted-decimal string representation of the input IP address.
+
+### stringToInt(ipString)
+- `ipString` - A dotted-decimal string format IPv4 address
+
+Returns a 32-bit unsigned integer representation of the input IP address.

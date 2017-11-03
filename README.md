@@ -9,6 +9,79 @@ namespace).
 
 # Data Structures
 
+## AsyncQueue
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+let queue = new StdLib.DataStructures.AsyncQueue(processItemSomehow, 2);
+```
+
+A Queue that automatically pops the first element from the array and runs the async `worker` on it, up to your set
+`concurrency` limit. Very very similar to the `async` module's [Queue](https://caolan.github.io/async/docs.html#queue).
+
+### Constructor(worker[, concurrency])
+- `worker` - A function that will be invoked every time an item is popped from the queue. This function should take these arguments:
+    - `item` - The item that you pushed into the queue
+    - `callback` - A function you should call once processing is finished for the item. The first argument to this callback should be an `Error` if the processing failed, or `null` if it succeeded. Any remaining arguments are passed as-is to the callback passed in the `push` method.
+
+### pause()
+
+Pauses execution. While paused, no new items will be dequeued and passed to a worker, but any workers currently processing
+will be allowed to finish.
+
+### resume()
+
+Resumes execution after you paused it. This will begin handing tasks off to workers again.
+
+### kill()
+
+Removes the `drain` and `empty` callbacks and empties the queue. Any workers that are already working will be allowed to
+finish. After you kill an AsyncQueue, you cannot use it anymore. Any further attempts to `push` items into the AsyncQueue
+will throw an `Error`.
+
+### push(item[, callback])
+- `item` - The item to push to the back of the queue
+- `callback` - An optional callback to be invoked once processing of this item is complete. The arguments to the callback will be the same as what the worker called back with.
+
+Adds a new item to the queue and if you haven't already reached your concurrency limit, immediately hands it off to a
+worker.
+
+### concurrency
+
+A property indicating your concurrency limit. You can assign to this to change the concurrency limit, but it will only
+take effect the next time you push an item into the queue or the next time a worker finishes.
+
+### worker
+
+A property containing the worker function that's being used to process items in the queue. You may change it directly if
+needed.
+
+### running
+
+A read-only property indicating how many workers are currently running.
+
+### paused
+
+A read-only boolean property indicating if the queue is currently paused.
+
+### length
+
+A read-only property indicating how many items are remaining in the queue, waiting to be assigned to a worker.
+
+### drain
+
+A property you can assign a function to, which will be called whenever the queue is empty and the last worker finishes.
+
+### empty
+
+A property you can assign a function to, which will be called whenever the last item in the queue is handed off to a worker.
+
+### error
+
+A property you can assign a function to, which will be called whenever a worker finishes with an error.
+The first argument to the function is the error, and the second is the item that caused it.
+
+
 ## LeastUsedCache
 
 ```js
@@ -48,6 +121,7 @@ Checks if garbage collection is necessary at this point in time, and if it is, d
 
 Manually collects garbage immediately, without waiting for the proper timeout.
 
+
 ## Queue
 
 ```js
@@ -75,6 +149,7 @@ Removes and discards every item in the queue.
 ### length
 
 A property indicating how many items are in the queue.
+
 
 ## Stack
 
@@ -104,7 +179,13 @@ Removes and discards every item in the stack.
 
 A property indicating how many items are on the stack.
 
-## IPv4
+
+# IPv4
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const IPv4 = StdLib.IPv4;
+```
 
 ### intToString(ipInt)
 - `ipInt` - An integer-format IPv4 address

@@ -41,3 +41,11 @@ Stack.prototype.pop = function() {
 	this.length--;
 	return entry;
 };
+
+/**
+ * Empty this stack by removing all items in it.
+ */
+Stack.prototype.empty = function() {
+	this._tail = null;
+	this.length = 0;
+};

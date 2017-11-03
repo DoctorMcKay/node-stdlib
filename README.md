@@ -68,6 +68,10 @@ Pushes an item into the back of the queue. Returns the queue's new length. Alias
 
 Removes the first item from the queue and returns it. Returns `null` if the queue is empty. Alias: `dequeue()`
 
+### empty()
+
+Removes and discards every item in the queue.
+
 ### length
 
 A property indicating how many items are in the queue.
@@ -91,6 +95,10 @@ Pushes an item onto the top of the stack. Returns the stack's new length.
 ### pop()
 
 Removes the top item from the stack and returns it. Returns `null` if the stack is empty.
+
+### empty()
+
+Removes and discards every item in the stack.
 
 ### length
 

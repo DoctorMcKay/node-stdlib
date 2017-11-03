@@ -65,3 +65,12 @@ Queue.prototype.dequeue = Queue.prototype.pop = function() {
 	this.length--;
 	return entry;
 };
+
+/**
+ * Empty this queue by removing all items in it.
+ */
+Queue.prototype.empty = function() {
+	this._head = null;
+	this._tail = null;
+	this.length = 0;
+};

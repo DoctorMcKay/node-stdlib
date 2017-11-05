@@ -7,6 +7,18 @@ It will follow semver, but don't expect me to pay any attention to feature reque
 As I wrote above, this is really only intended for my own personal use (as with everything in the @doctormckay npm
 namespace).
 
+# Table of Contents
+- [Data Structures](#data-structures)
+    - [AsyncQueue](#asyncqueue)
+    - [LeastUsedCache](#leastusedcache)
+    - [Stack](#stack)
+    - [Queue](#queue)
+- [HTTP](#http)
+    - [getProxyAgent](#getproxyagentsecure-proxyurl-proxytimeout)
+- [IPv4](#ipv4)
+    - [intToString](#inttostringipint)
+    - [stringToInt](#stringtointipstring)
+
 # Data Structures
 
 ## AsyncQueue

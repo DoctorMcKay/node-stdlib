@@ -180,6 +180,42 @@ Removes and discards every item in the stack.
 A property indicating how many items are on the stack.
 
 
+# HTTP
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const HTTP = StdLib.HTTP;
+```
+
+### getProxyAgent(secure[, proxyUrl[, proxyTimeout]])
+ - `secure` - `true` if this agent will be used for secure (HTTPS) requests, or `false` if not
+ - `proxyUrl` - The URL to your proxy, or something falsy to just get `false` returned (indicating no agent)
+ - `proxyTimeout` - The timeout for connecting to the proxy in milliseconds; default `5000` (5 seconds)
+ 
+Gets an (HTTP || HTTPS).Agent that can be used to make requests through an HTTP/HTTPS proxy.
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const HTTPS = require('https');
+
+HTTPS.get({
+  "host": "icanhazip.com",
+  "port": 443,
+  "agent": StdLib.HTTP.getProxyAgent(true, "http://user:pass@1.2.3.4:12345", 10000)
+}, (res) => {
+    if (res.statusCode != 200) {
+        console.log("HTTP error: " + res.statusCode);
+    }
+    
+    res.on('data', (chunk) => {
+        console.log(chunk.toString('utf8'));
+    });
+}).on('error', (err) => {
+    console.log(err);
+});
+```
+
+
 # IPv4
 
 ```js

@@ -18,6 +18,8 @@ namespace).
 - [IPv4](#ipv4)
     - [intToString](#inttostringipint)
     - [stringToInt](#stringtointipstring)
+- [Promises](#promises)
+    - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
 
 # Data Structures
 
@@ -244,3 +246,13 @@ Returns a dotted-decimal string representation of the input IP address.
 - `ipString` - A dotted-decimal string format IPv4 address
 
 Returns a 32-bit unsigned integer representation of the input IP address.
+
+# Promises
+
+### callbackPromise(callbackArgs, callback, [isOptional, ]excutor)
+- `callbackArgs` - An array of strings indicating the names and order of arguments in the callback. `null` to just pass the entire promise result object
+- `callback` - A callback function, or falsy if none
+- `isOptional` - Indicates whether the callback is optional. If it isn't, then rejected promises will crash the app (eventually). Default `false`.
+- `executor` - The executor function for the promise with signature `(accept, reject)`
+
+Creates and returns a promise that can also be used to fire a callback, for supporting both promises and callbacks.

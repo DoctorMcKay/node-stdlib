@@ -2,17 +2,26 @@ const Promises = module.exports;
 
 /**
  * Return a new promise that will also invoke the callback, if provided.
- * @param {function} executor
- * @param {function} [callback]
+ * @param {string[]} callbackArgs
+ * @param {function|null} callback
  * @param {boolean} [isOptional=false] - If true, then the app won't crash if the user neither provides a callback nor adds a `catch` listener
+ * @param {function} executor
  * @returns {Promise}
  */
-Promises.callbackPromise = function(executor, callback, isOptional) {
+Promises.callbackPromise = function(callbackArgs, callback, isOptional, executor) {
+	if (typeof isOptional === 'function') {
+		executor = isOptional;
+		isOptional = false;
+	}
+
 	let promise = makePromise(executor);
 
 	if (typeof callback === 'function' || isOptional) {
 		promise.then((result) => {
-			typeof callback === 'function' ? callback(null, result) : noop();
+			if (typeof callback === 'function') {
+				let args = callbackArgs.map(argName => typeof result[argName] === 'undefined' ? null : result[argName]);
+				callback(null, ...args);
+			}
 		}).catch((err) => {
 			typeof callback === 'function' ? callback(err) : noop();
 		});

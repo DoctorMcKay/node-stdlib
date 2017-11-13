@@ -42,6 +42,10 @@ callbackPromise(['foo', 'bar'], null, true, doRejectImmediate).catch(verifyError
 callbackPromise(['foo', 'bar'], verifyError, true, doRejectImmediate).catch(verifyError);                     // both
 callbackPromise(['foo', 'bar'], null, true, doRejectImmediate);                                               // neither
 
+// object callback
+callbackPromise(null, verifyFooBarObjectCallback, doAccept);
+callbackPromise(null, verifyFooBarObjectCallback, doAcceptImmediate);
+
 ///////
 	
 function doAccept(accept, reject) {
@@ -74,6 +78,10 @@ function verifyFooBarCallback(err, foo, bar) {
 	}
 	
 	console.log("verifyFooBarCallback passed");
+}
+
+function verifyFooBarObjectCallback(err, obj) {
+	verifyFooBarPromise(obj);
 }
 
 function verifyFooBarPromise(result) {

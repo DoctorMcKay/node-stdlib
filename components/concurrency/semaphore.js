@@ -24,6 +24,15 @@ Semaphore.prototype.wait = function(item) {
 };
 
 /**
+ * Returns whether the semaphore is currently free. A semaphore is free if a call to wait() would result in immediate
+ * invocation.
+ * @return {boolean}
+ */
+Semaphore.prototype.isFree = function() {
+	return this._queue.running < this._queue.concurrency;
+};
+
+/**
  * @param {function} item
  * @param {function} callback
  * @private

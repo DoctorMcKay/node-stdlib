@@ -48,6 +48,11 @@ the callback will be invoked immediately.
 
 Once you're done processing and are ready to release the semaphore, call `release()`.
 
+### isFree()
+
+Returns `true` if the semaphore is currently free, or `false` if not. A semaphore is free if a call to `wait()` would
+result in the callback being immediately invoked.
+
 # Data Structures
 
 ## AsyncQueue

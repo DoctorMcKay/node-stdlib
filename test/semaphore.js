@@ -4,24 +4,30 @@ const Semaphore = StdLib.Concurrency.Semaphore;
 let g_Counter = 0;
 
 let sem = new Semaphore();
+checkSemFree(sem, true);
 let now = Date.now();
 sem.wait((release) => {
 	checkTimeElapsed(now, 0, 100);
 	checkCounter(0);
 	g_Counter++;
+	checkSemFree(sem, false);
 
 	now = Date.now();
 	sem.wait((release2) => {
 		checkTimeElapsed(now, 1000, 1100);
 		checkCounter(1);
 		g_Counter++;
+		checkSemFree(sem, false);
 
 		release2();
+		checkSemFree(sem, true);
 		now = Date.now();
 		sem.wait((release3) => {
 			checkTimeElapsed(now, 0, 100);
 			checkCounter(2);
+			checkSemFree(sem, false);
 			release3();
+			checkSemFree(sem, true);
 
 			console.log("All tests passed");
 		});
@@ -29,6 +35,15 @@ sem.wait((release) => {
 
 	setTimeout(release, 1000);
 });
+
+function checkSemFree(sem, shouldBeFree) {
+	let isFree = sem.isFree();
+	if (isFree != shouldBeFree) {
+		throw new Error(`Semaphore was expected to be ${shouldBeFree ? 'free' : 'not free'}, but it's ${isFree ? 'free' : 'not free'}`);
+	} else {
+		console.log("Semaphore is expectedly " + (isFree ? 'free' : 'not free'));
+	}
+}
 
 function checkCounter(expectedValue) {
 	if (g_Counter != expectedValue) {
@@ -43,8 +58,8 @@ function checkTimeElapsed(started, lowerBound, upperBound) {
 	lowerBound = lowerBound || 0;
 	upperBound = upperBound || 60000;
 	if (elapsedMs < lowerBound || elapsedMs > upperBound) {
-		throw new Error(`Time elapsed failure: ${lowerBound} < ${elapsedMs} < ${upperBound}`);
+		throw new Error(`Time elapsed failure: ${lowerBound} <= ${elapsedMs} <= ${upperBound}`);
 	} else {
-		console.log(`Time elapsed passed: ${lowerBound} < ${elapsedMs} < ${upperBound}`);
+		console.log(`Time elapsed passed: ${lowerBound} <= ${elapsedMs} <= ${upperBound}`);
 	}
 }

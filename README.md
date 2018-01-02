@@ -8,6 +8,8 @@ As I wrote above, this is really only intended for my own personal use (as with 
 namespace).
 
 # Table of Contents
+- [Concurrency](#concurrency)
+    - [Semaphore](#semaphore)
 - [Data Structures](#data-structures)
     - [AsyncQueue](#asyncqueue)
     - [LeastUsedCache](#leastusedcache)
@@ -20,6 +22,31 @@ namespace).
     - [stringToInt](#stringtointipstring)
 - [Promises](#promises)
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
+
+# Concurrency
+
+## Semaphore
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+let sem = new StdLib.Concurrency.Semaphore();
+```
+
+A semaphore for ensuring only one (or some number) concurrent asynchronous task runs at once.
+
+### Constructor([concurrency])
+- `concurrency` - The maximum number of locks the semaphore will allow at one time. Optional, default 1
+
+Creates a new Semaphore with some concurrency limit.
+
+### wait(callback)
+- `callback` - A function to be called when waiting is over
+    - `release` - A function you need to call once you're done to release the semaphore
+
+Waits for the semaphore to be free. Once free, the function provided will be called. If the semaphore is already free,
+the callback will be invoked immediately.
+
+Once you're done processing and are ready to release the semaphore, call `release()`.
 
 # Data Structures
 

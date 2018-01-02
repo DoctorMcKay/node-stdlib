@@ -15,7 +15,7 @@ sem.wait((release) => {
 	now = Date.now();
 	sem.wait((release2) => {
 		checkTimeElapsed(now, 1000, 1100);
-		checkCounter(1);
+		checkCounter(2);
 		g_Counter++;
 		checkSemFree(sem, false);
 
@@ -24,16 +24,24 @@ sem.wait((release) => {
 		now = Date.now();
 		sem.wait((release3) => {
 			checkTimeElapsed(now, 0, 100);
-			checkCounter(2);
+			checkCounter(3);
 			checkSemFree(sem, false);
 			release3();
 			checkSemFree(sem, true);
-
-			console.log("All tests passed");
+			// this will return to line 42
 		});
 	});
 
 	setTimeout(release, 1000);
+});
+
+sem.wait((release) => {
+	checkCounter(1);
+	g_Counter++;
+	checkSemFree(sem, false);
+	release();
+	checkSemFree(sem, true); // it should be free at this point because the remaining work is synchronous
+	console.log("All tests passed");
 });
 
 function checkSemFree(sem, shouldBeFree) {

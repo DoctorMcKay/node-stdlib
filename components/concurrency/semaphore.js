@@ -29,7 +29,7 @@ Semaphore.prototype.wait = function(item) {
  * @return {boolean}
  */
 Semaphore.prototype.isFree = function() {
-	return this._queue.running < this._queue.concurrency;
+	return this._queue.running < this._queue.concurrency && this._queue.length == 0;
 };
 
 /**

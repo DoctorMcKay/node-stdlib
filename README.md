@@ -20,6 +20,8 @@ namespace).
 - [IPv4](#ipv4)
     - [intToString](#inttostringipint)
     - [stringToInt](#stringtointipstring)
+- [Parsing](#parsing)
+    - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
 
@@ -279,7 +281,37 @@ Returns a dotted-decimal string representation of the input IP address.
 
 Returns a 32-bit unsigned integer representation of the input IP address.
 
+# Parsing
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Parsing = StdLib.Parsing;
+```
+
+### orderedArgs(input)
+- `input` - An input string
+
+Parses a set of ordered, unnamed command-line arguments similar to how the Source engine does it. For example, instead
+of doing it like `--arg=foo -pbar` it parses like `one two "three three" four`.
+
+To be a little more specific, arguments are split on spaces but spaces inside quotes are interpreted as part of the value.
+Quotes, spaces, and backslashes can be escaped with backslashes. Double spaces between arguments are collapsed, but
+you can preserve empty values with quotes. Some examples:
+
+```
+one two three                   => ["one", "two", "three"]
+one two "three three" four      => ["one", "two", "three three", "four"]
+one two  three four             => ["one", "two", "three", "four"]
+one two "" four five            => ["one", "two", "", "four", "five"]
+one two\ two three four         => ["one", "two two", "three", "four"]
+```
+
 # Promises
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Promises = StdLib.Promises;
+```
 
 ### callbackPromise(callbackArgs, callback, [isOptional, ]excutor)
 - `callbackArgs` - An array of strings indicating the names and order of arguments in the callback. `null` to just pass the entire promise result object

@@ -24,6 +24,8 @@ namespace).
     - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
+- [Units](#units)
+    - [humanReadableBytes](#humanreadablebytesbytes-binary)
 
 # Concurrency
 
@@ -320,3 +322,16 @@ const Promises = StdLib.Promises;
 - `executor` - The executor function for the promise with signature `(accept, reject)`
 
 Creates and returns a promise that can also be used to fire a callback, for supporting both promises and callbacks.
+
+# Units
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Units = StdLib.Units;
+```
+
+### humanReadableBytes(bytes, binary)
+- `bytes` - Number of bytes
+- `binary` - Pass `true` if you want to use the base-1024 system (i.e. MiB instead of MB)
+
+Returns a human-readable string representation of the input byte count, e.g. 12.5 MB.

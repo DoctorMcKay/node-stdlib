@@ -31,7 +31,7 @@ function orderedArgs(input) {
 			// beginning or end of a quoted arg
 			quoted = !quoted;
 			argWasQuoted = quoted ? true : argWasQuoted;
-		} else if (c == '\\') {
+		} else if (c == '\\' && !escaped) {
 			// next character is escaped
 			escaped = true;
 		} else {

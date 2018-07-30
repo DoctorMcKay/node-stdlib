@@ -315,7 +315,7 @@ const StdLib = require('@doctormckay/stdlib');
 const Promises = StdLib.Promises;
 ```
 
-### callbackPromise(callbackArgs, callback, [isOptional, ]excutor)
+### callbackPromise(callbackArgs, callback, [isOptional, ]executor)
 - `callbackArgs` - An array of strings indicating the names and order of arguments in the callback. `null` to just pass the entire promise result object
 - `callback` - A callback function, or falsy if none
 - `isOptional` - Indicates whether the callback is optional. If it isn't, then rejected promises will crash the app (eventually). Default `false`.

@@ -7,7 +7,7 @@ const IPv4 = module.exports;
  */
 IPv4.intToString = function(ipInt) {
 	let buf = Buffer.alloc(4);
-	buf.writeUInt32BE(ipInt, 0);
+	buf.writeUInt32BE(ipInt >>> 0, 0);
 	return Array.prototype.join.call(buf, '.');
 };
 

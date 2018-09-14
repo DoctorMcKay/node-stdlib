@@ -38,11 +38,14 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 
 		// Make the CONNECT request
 		let finished = false;
+		let didWeEverConnect = false;
 		let req = (prox.protocol == "https:" ? HTTPS : HTTP).request(prox);
 		req.end();
 		req.setTimeout(proxyTimeout || 5000);
 
 		req.on('connect', (res, socket) => {
+			didWeEverConnect = true;
+
 			if (finished) {
 				// This has already errored
 				socket.end();
@@ -96,6 +99,7 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 			function onTlsError(err) {
 				// TLS handshake error
 				socket.end();
+				err.proxyConnecting = !didWeEverConnect;
 				callback(err);
 			}
 		});
@@ -106,7 +110,9 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 			}
 
 			finished = true;
-			callback(new Error("Proxy connection timed out"));
+			let err = new Error("Proxy connection timed out");
+			err.proxyConnecting = !didWeEverConnect;
+			callback(err);
 		});
 
 		req.on('error', (err) => {
@@ -115,6 +121,7 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 			}
 
 			finished = true;
+			err.proxyConnecting = !didWeEverConnect;
 			callback(err);
 		});
 	};

@@ -84,7 +84,7 @@ function ensureBuffer(input) {
 	if (typeof input === 'number') {
 		return Buffer.alloc(input);
 	} else if (typeof input === 'string') {
-		return Buffer.from(input);
+		return Buffer.from(input, 'utf8');
 	} else {
 		throw new Error("input must be buffer, number, or string; received " + typeof input);
 	}

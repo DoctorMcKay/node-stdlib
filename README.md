@@ -15,6 +15,11 @@ namespace).
     - [LeastUsedCache](#leastusedcache)
     - [Stack](#stack)
     - [Queue](#queue)
+- [Hashing](#hashing)
+    - [md5](#md5)
+    - [sha1](#sha1)
+    - [sha256](#sha256)
+    - [crc32](#crc32)
 - [HTTP](#http)
     - [getProxyAgent](#getproxyagentsecure-proxyurl-proxytimeout)
 - [IPv4](#ipv4)
@@ -228,6 +233,38 @@ Removes and discards every item in the stack.
 ### length
 
 A property indicating how many items are on the stack.
+
+
+# Hashing
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Hashing = StdLib.Hashing;
+```
+
+### md5(input[, outputForm])
+- `input` - Either a Buffer or a string (if a string, will be interpreted as UTF-8)
+- `outputForm` - A string indicating what form should be returned; one of the [Buffer encodings](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings), or alternatively `buffer` to just return a Buffer. Default `hex`.
+
+Return the MD5 hash of the input.
+
+### sha1(input[, outputForm])
+- `input` - Either a Buffer or a string (if a string, will be interpreted as UTF-8)
+- `outputForm` - A string indicating what form should be returned; one of the [Buffer encodings](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings), or alternatively `buffer` to just return a Buffer. Default `hex`.
+
+Return the SHA-1 hash of the input.
+
+### sha256(input[, outputForm])
+- `input` - Either a Buffer or a string (if a string, will be interpreted as UTF-8)
+- `outputForm` - A string indicating what form should be returned; one of the [Buffer encodings](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings), or alternatively `buffer` to just return a Buffer. Default `hex`.
+
+Return the SHA-256 hash of the input.
+
+### crc32(input[, outputForm])
+- `input` - Either a Buffer or a string (if a string, will be interpreted as UTF-8)
+- `outputForm` - A string indicating what form should be returned; one of the [Buffer encodings](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings), or alternatively `buffer` to just return a Buffer or `number` to return an unsigned 32-bit integer. Default `number`.
+
+Return the CRC32 hash of the input. 
 
 
 # HTTP

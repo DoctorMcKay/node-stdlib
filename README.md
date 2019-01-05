@@ -29,6 +29,8 @@ namespace).
     - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
+- [Time](#time)
+    - [timestampString](#timestampstring-)
 - [Units](#units)
     - [humanReadableBytes](#humanreadablebytesbytes-binary)
 
@@ -359,6 +361,17 @@ const Promises = StdLib.Promises;
 - `executor` - The executor function for the promise with signature `(accept, reject)`
 
 Creates and returns a promise that can also be used to fire a callback, for supporting both promises and callbacks.
+
+# Time
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Time = StdLib.Time;
+```
+
+### timestampString()
+
+Returns a string containing the current 24-hour time in your local timezone in the format `YYYY-MM-DD HH:MM:SS`.
 
 # Units
 

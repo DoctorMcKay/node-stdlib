@@ -30,6 +30,17 @@ Promises.callbackPromise = function(callbackArgs, callback, isOptional, executor
 	return promise;
 };
 
+/**
+ * Resolves the promise after some specific delay.
+ * @param {int} sleepMilliseconds
+ * @returns {Promise}
+ */
+Promises.sleepAsync = function(sleepMilliseconds) {
+	return new Promise((accept) => {
+		setTimeout(accept, sleepMilliseconds);
+	});
+};
+
 function makePromise(executor) {
 	// this is its own function because reasons
 	// okay, those reasons are that it will still crash the app if the only `catch` listener was added in the same

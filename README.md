@@ -29,6 +29,7 @@ namespace).
     - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
+    - [sleepAsync](#sleepasyncsleepmilliseconds)
 - [Time](#time)
     - [timestampString](#timestampstring-)
 - [Units](#units)
@@ -361,6 +362,11 @@ const Promises = StdLib.Promises;
 - `executor` - The executor function for the promise with signature `(accept, reject)`
 
 Creates and returns a promise that can also be used to fire a callback, for supporting both promises and callbacks.
+
+### sleepAsync(sleepMilliseconds)
+- `sleepMilliseconds` - The time, in milliseconds, after which the Promise should be resolved
+
+Returns a Promise that is resolved after the specified delay.
 
 # Time
 

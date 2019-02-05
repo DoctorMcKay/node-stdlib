@@ -46,7 +46,7 @@ AsyncQueue.prototype.kill = function() {
 /**
  * Push a new item to the end of the queue.
  * @param {*} item - The item to push into the queue
- * @param {function} callback - A callback to be invoked after this item is finished processing, which takes arguments (err, result)
+ * @param {function} [callback] - A callback to be invoked after this item is finished processing, which takes arguments (err, result)
  * @return {int} The new length of the queue
  */
 AsyncQueue.prototype.enqueue = AsyncQueue.prototype.push = function(item, callback) {

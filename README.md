@@ -25,6 +25,9 @@ namespace).
 - [IPv4](#ipv4)
     - [intToString](#inttostringipint)
     - [stringToInt](#stringtointipstring)
+- [Objects](#objects)
+	- [clone](#cloneobj)
+	- [deepEqual](#deepequalobj1-obj2-strict)
 - [Parsing](#parsing)
     - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
@@ -322,6 +325,28 @@ Returns a dotted-decimal string representation of the input IP address.
 - `ipString` - A dotted-decimal string format IPv4 address
 
 Returns a 32-bit unsigned integer representation of the input IP address.
+
+# Objects
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Objects = StdLib.Objects;
+```
+
+### clone(obj)
+- `obj` - Some value to clone (may be any type)
+
+Clones a value, and all its sub-objects.
+
+### deepEqual(obj1, obj2[, strict])
+- `obj1` - The first thing to compare
+- `obj2` - The second thing to compare
+- `strict` - Optional. Pass `true` to use strict equality checks (`===`). Default false.
+
+Checks whether two values and all their sub-objects are equal, and returns `true` or `false`.
+
+Two objects are considered to be equal if they have all the same properties and each identical property has the same value.
+The order of properties is not considered, except in arrays.
 
 # Parsing
 

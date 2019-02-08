@@ -8,6 +8,8 @@ As I wrote above, this is really only intended for my own personal use (as with 
 namespace).
 
 # Table of Contents
+- [Arrays](#arrays)
+	- [unique](#uniquearray-strict)
 - [Concurrency](#concurrency)
     - [Semaphore](#semaphore)
 - [Data Structures](#data-structures)
@@ -37,6 +39,19 @@ namespace).
     - [timestampString](#timestampstring-)
 - [Units](#units)
     - [humanReadableBytes](#humanreadablebytesbytes-binary)
+
+# Arrays
+
+```js
+const StdLib = require('@doctormckay/stdlib');
+const Arrays = StdLib.Arrays;
+```
+
+## unique(array[, strict])
+- `array` - The array to get unique elements from
+- `strict` - Optional. Pass `true` to use strict comparisons, or `false` to use weak comparisons. Performance will increase dramatically when using weak comparisons on large arrays. Default `false`.
+
+Returns an array containing only the unique elements from the input array, in the order they first appeared.
 
 # Concurrency
 

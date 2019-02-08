@@ -1,5 +1,6 @@
 const StdLib = module.exports;
 
+StdLib.Arrays = require('./components/arrays.js');
 StdLib.Concurrency = require('./components/concurrency.js');
 StdLib.DataStructures = require('./components/data_structures.js');
 StdLib.Hashing = require('./components/hashing.js');

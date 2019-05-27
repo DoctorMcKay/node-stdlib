@@ -426,8 +426,8 @@ const StdLib = require('@doctormckay/stdlib');
 const Units = StdLib.Units;
 ```
 
-### humanReadableBytes(bytes, binary)
+### humanReadableBytes(bytes[, binary])
 - `bytes` - Number of bytes
-- `binary` - Pass `true` if you want to use the base-1024 system (i.e. MiB instead of MB)
+- `binary` - Pass `true` if you want to use the base-1024 system (i.e. MiB instead of MB). Default `false`
 
 Returns a human-readable string representation of the input byte count, e.g. 12.5 MB.

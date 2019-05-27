@@ -19,8 +19,10 @@ Promises.callbackPromise = function(callbackArgs, callback, isOptional, executor
 	if (typeof callback === 'function' || isOptional) {
 		promise.then((result) => {
 			if (typeof callback === 'function') {
-				let args = callbackArgs ? callbackArgs.map(argName => typeof result[argName] === 'undefined' ? null : result[argName]) : [result];
-				callback(null, ...args);
+				setImmediate(() => {
+					let args = callbackArgs ? callbackArgs.map(argName => typeof result[argName] === 'undefined' ? null : result[argName]) : [result];
+					callback(null, ...args);
+				});
 			}
 		}).catch((err) => {
 			typeof callback === 'function' ? callback(err) : noop();

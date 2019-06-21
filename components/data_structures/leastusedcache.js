@@ -74,18 +74,14 @@ LeastUsedCache.prototype.checkGC = function() {
 LeastUsedCache.prototype.gc = function() {
 	this._lastGc = Date.now();
 
-	var keys = this.getKeys();
-	var i, firstTime, firstIdx;
-	while (keys.length > this._maxItems) {
-		firstTime = this._lastAccess[keys[0]];
-		firstIdx = 0;
-		for (i = 1; i < keys.length; i++) {
-			if (this._lastAccess[keys[i]] < firstTime) {
-				firstTime = this._lastAccess[keys[i]];
-				firstIdx = i;
-			}
-		}
-
-		this.delete(keys.splice(firstIdx, 1)[0]);
+	let keys = this.getKeys();
+	if (keys.length <= this._maxItems) {
+		return; // we aren't over the limit, so nothing to do
 	}
+
+	// sort the keys so that the least-frequently-accessed ones are at the end
+	keys.sort((a, b) => this._lastAccess[a] > this._lastAccess[b] ? -1 : 1);
+	keys.slice(keys.length - (keys.length - this._maxItems)).forEach((key) => {
+		this.delete(key);
+	});
 };

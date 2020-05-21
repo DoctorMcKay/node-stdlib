@@ -33,7 +33,9 @@ namespace).
 - [Parsing](#parsing)
     - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
+    - [timeoutPromise](#timeoutpromisetimeout-executor)
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
+    - [timeoutCallbackPromise](#timeoutcallbackpromisetimeout-callbackargs-callback-isoptional-executor)
     - [sleepAsync](#sleepasyncsleepmilliseconds)
 - [Time](#time)
     - [timestampString](#timestampstring-)
@@ -395,13 +397,30 @@ const StdLib = require('@doctormckay/stdlib');
 const Promises = StdLib.Promises;
 ```
 
+### timeoutPromise(timeout, executor)
+- `timeout` - Timeout in milliseconds. If this value is <= 0, then the timeout functionality is disabled.
+- `executor` - The executor function for the promise with signature `(resolve, reject)`
+
+Creates and returns a promise that automatically rejects after the specified timeout if the promise has not yet been settled.
+
+If a promise times out, then it will be rejected with an `Error` object with message `Request timed out`.
+
 ### callbackPromise(callbackArgs, callback, [isOptional, ]executor)
 - `callbackArgs` - An array of strings indicating the names and order of arguments in the callback. `null` to just pass the entire promise result object
 - `callback` - A callback function, or falsy if none
 - `isOptional` - Indicates whether the callback is optional. If it isn't, then rejected promises will crash the app (eventually). Default `false`.
-- `executor` - The executor function for the promise with signature `(accept, reject)`
+- `executor` - The executor function for the promise with signature `(resolve, reject)`
 
 Creates and returns a promise that can also be used to fire a callback, for supporting both promises and callbacks.
+
+### callbackTimeoutPromise(timeout, callbackArgs, callback, [isOptional, ]executor)
+- `timeout` - Timeout in milliseconds. If this value is <= 0, then the timeout functionality is disabled.
+- `callbackArgs` - An array of strings indicating the names and order of arguments in the callback. `null` to just pass the entire promise result object
+- `callback` - A callback function, or falsy if none
+- `isOptional` - Indicates whether the callback is optional. If it isn't, then rejected promises will crash the app (eventually). Default `false`.
+- `executor` - The executor function for the promise with signature `(resolve, reject)`
+
+Creates and returns a promise that has properties of both `timeoutPromise` and `callbackPromise`.
 
 ### sleepAsync(sleepMilliseconds)
 - `sleepMilliseconds` - The time, in milliseconds, after which the Promise should be resolved

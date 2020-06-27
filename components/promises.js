@@ -7,7 +7,7 @@ const Promises = module.exports;
  * @returns {Promise}
  */
 Promises.timeoutPromise = function(timeout, executor) {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		let timedOut = false;
 		let timer = null;
 
@@ -18,17 +18,24 @@ Promises.timeoutPromise = function(timeout, executor) {
 			}, timeout);
 		}
 
-		executor((resolveValue) => {
+		try {
+			await executor((resolveValue) => {
+				if (!timedOut) {
+					clearTimeout(timer);
+					resolve(resolveValue);
+				}
+			}, (rejectValue) => {
+				if (!timedOut) {
+					clearTimeout(timer);
+					reject(rejectValue);
+				}
+			});
+		} catch (ex) {
 			if (!timedOut) {
 				clearTimeout(timer);
-				resolve(resolveValue);
+				reject(ex);
 			}
-		}, (rejectValue) => {
-			if (!timedOut) {
-				clearTimeout(timer);
-				reject(rejectValue);
-			}
-		});
+		}
 	});
 };
 

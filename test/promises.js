@@ -2,71 +2,84 @@ const callbackPromise = require('../index.js').Promises.callbackPromise;
 const timeoutPromise = require('../index.js').Promises.timeoutPromise;
 
 // non-optional; non-immediate
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, doAccept);                                              // callback only
-callbackPromise(['foo', 'bar'], null, doAccept).then(verifyFooBarPromise);                           // promise only
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, doAccept).then(verifyFooBarPromise);                    // both
-callbackPromise(['foo', 'bar'], null, doAccept);                                                     // neither
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, execAccept);                                              // callback only
+callbackPromise(['foo', 'bar'], null, execAccept).then(verifyFooBarPromise);                           // promise only
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, execAccept).then(verifyFooBarPromise);                    // both
+callbackPromise(['foo', 'bar'], null, execAccept);                                                     // neither
 
-callbackPromise(['foo', 'bar'], verifyError, doReject);                                                       // callback only
-callbackPromise(['foo', 'bar'], null, doReject).catch(verifyError);                                  // promise only
-callbackPromise(['foo', 'bar'], verifyError, doReject).catch(verifyError);                                    // both
+callbackPromise(['foo', 'bar'], verifyError, execReject);                                                       // callback only
+callbackPromise(['foo', 'bar'], null, execReject).catch(verifyError);                                  // promise only
+callbackPromise(['foo', 'bar'], verifyError, execReject).catch(verifyError);                                    // both
 
 // non-optional; immediate
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, doAcceptImmediate);                                     // callback only
-callbackPromise(['foo', 'bar'], null, doAcceptImmediate).then(verifyFooBarPromise);                  // promise only
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, doAcceptImmediate).then(verifyFooBarPromise);           // both
-callbackPromise(['foo', 'bar'], null, doAcceptImmediate);                                            // neither
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, execAcceptImmediate);                                     // callback only
+callbackPromise(['foo', 'bar'], null, execAcceptImmediate).then(verifyFooBarPromise);                  // promise only
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, execAcceptImmediate).then(verifyFooBarPromise);           // both
+callbackPromise(['foo', 'bar'], null, execAcceptImmediate);                                            // neither
 
-callbackPromise(['foo', 'bar'], verifyError, doRejectImmediate);                                              // callback only
-callbackPromise(['foo', 'bar'], null, doRejectImmediate).catch(verifyError);                         // promise only
-callbackPromise(['foo', 'bar'], verifyError, doRejectImmediate).catch(verifyError);                           // both
+callbackPromise(['foo', 'bar'], verifyError, execRejectImmediate);                                              // callback only
+callbackPromise(['foo', 'bar'], null, execRejectImmediate).catch(verifyError);                         // promise only
+callbackPromise(['foo', 'bar'], verifyError, execRejectImmediate).catch(verifyError);                           // both
 
 // optional; non-immediate
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, doAccept);                              // callback only
-callbackPromise(['foo', 'bar'], null, true, doAccept).then(verifyFooBarPromise);           // promise only
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, doAccept).then(verifyFooBarPromise);    // both
-callbackPromise(['foo', 'bar'], null, true, doAccept);                                     // neither
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, execAccept);                              // callback only
+callbackPromise(['foo', 'bar'], null, true, execAccept).then(verifyFooBarPromise);           // promise only
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, execAccept).then(verifyFooBarPromise);    // both
+callbackPromise(['foo', 'bar'], null, true, execAccept);                                     // neither
 
-callbackPromise(['foo', 'bar'], verifyError, true, doReject);                                       // callback only
-callbackPromise(['foo', 'bar'], null, true, doReject).catch(verifyError);                  // promise only
-callbackPromise(['foo', 'bar'], verifyError, true, doReject).catch(verifyError);                    // both
-callbackPromise(['foo', 'bar'], null, true, doReject);                                     // neither
+callbackPromise(['foo', 'bar'], verifyError, true, execReject);                                       // callback only
+callbackPromise(['foo', 'bar'], null, true, execReject).catch(verifyError);                  // promise only
+callbackPromise(['foo', 'bar'], verifyError, true, execReject).catch(verifyError);                    // both
+callbackPromise(['foo', 'bar'], null, true, execReject);                                     // neither
 
 // optional; immediate
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, doAcceptImmediate);                     // callback only
-callbackPromise(['foo', 'bar'], null, true, doAcceptImmediate).then(verifyFooBarPromise);  // promise only
-callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, doAcceptImmediate).then(verifyFooBarPromise);     // both
-callbackPromise(['foo', 'bar'], null, true, doAcceptImmediate);                            // neither
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, execAcceptImmediate);                     // callback only
+callbackPromise(['foo', 'bar'], null, true, execAcceptImmediate).then(verifyFooBarPromise);  // promise only
+callbackPromise(['foo', 'bar'], verifyFooBarCallback, true, execAcceptImmediate).then(verifyFooBarPromise);     // both
+callbackPromise(['foo', 'bar'], null, true, execAcceptImmediate);                            // neither
 
-callbackPromise(['foo', 'bar'], verifyError, true, doRejectImmediate);                              // callback only
-callbackPromise(['foo', 'bar'], null, true, doRejectImmediate).catch(verifyError);         // promise only
-callbackPromise(['foo', 'bar'], verifyError, true, doRejectImmediate).catch(verifyError);           // both
-callbackPromise(['foo', 'bar'], null, true, doRejectImmediate);                            // neither
+callbackPromise(['foo', 'bar'], verifyError, true, execRejectImmediate);                              // callback only
+callbackPromise(['foo', 'bar'], null, true, execRejectImmediate).catch(verifyError);         // promise only
+callbackPromise(['foo', 'bar'], verifyError, true, execRejectImmediate).catch(verifyError);           // both
+callbackPromise(['foo', 'bar'], null, true, execRejectImmediate);                            // neither
 
 // object callback
-callbackPromise(null, verifyFooBarObjectCallback, doAccept);
-callbackPromise(null, verifyFooBarObjectCallback, doAcceptImmediate);
+callbackPromise(null, verifyFooBarObjectCallback, execAccept);
+callbackPromise(null, verifyFooBarObjectCallback, execAcceptImmediate);
 
 // timeout promises
-timeoutPromise(100, doAccept).then(verifyNotCalled).catch(verifyTimeoutError);
-timeoutPromise(5000, doAcceptImmediate).then(verifyFooBarPromise).catch(verifyNotCalled);
+timeoutPromise(100, execAccept).then(verifyNotCalled).catch(verifyTimeoutError);
+timeoutPromise(5000, execAcceptImmediate).then(verifyFooBarPromise).catch(verifyNotCalled);
+
+timeoutPromise(1000, execThrowError).then(verifyNotCalled).catch(verifyError);
+timeoutPromise(1000, execPromiseReject).then(verifyNotCalled).catch(verifyError);
 
 ///////
 
-function doAccept(accept, reject) {
+function execAccept(accept, reject) {
 	setTimeout(() => accept({"bar": "bar", "foo": "foo"}), 500);
 }
 
-function doReject(accept, reject) {
+function execReject(accept, reject) {
 	setTimeout(() => reject(new Error("test 1 2 3")), 500);
 }
 
-function doAcceptImmediate(accept, reject) {
+function execAcceptImmediate(accept, reject) {
 	accept({"bar": "bar", "foo": "foo"});
 }
 
-function doRejectImmediate(accept, reject) {
+function execRejectImmediate(accept, reject) {
 	reject(new Error("test 1 2 3"));
+}
+
+function execThrowError() {
+	throw new Error('Error thrown from doThrowError');
+}
+
+function execPromiseReject() {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => reject(new Error('Error from rejecting promise in execAsyncReject')), 500);
+	});
 }
 
 function verifyFooBarCallback(err, foo, bar) {

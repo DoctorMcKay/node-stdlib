@@ -7,7 +7,7 @@ const Promises = module.exports;
  * @returns {Promise}
  */
 Promises.timeoutPromise = function(timeout, executor) {
-	return new Promise(async (resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		let timedOut = false;
 		let timer = null;
 
@@ -19,19 +19,33 @@ Promises.timeoutPromise = function(timeout, executor) {
 		}
 
 		try {
-			await executor((resolveValue) => {
+			let executorReturn = executor((resolveValue) => {
+				// resolve() was called inside the executor
 				if (!timedOut) {
 					clearTimeout(timer);
 					resolve(resolveValue);
 				}
 			}, (rejectValue) => {
+				// reject() was called inside the executor
 				if (!timedOut) {
 					clearTimeout(timer);
 					reject(rejectValue);
 				}
 			});
+
+			if (typeof executorReturn == 'object' && executorReturn !== null && typeof executorReturn.catch == 'function') {
+				// It's an async function
+				executorReturn.catch((ex) => {
+					// The executor is an async function and it was rejected (e.g. new Promise(async (resolve, reject) => { }))
+					if (!timedOut) {
+						clearTimeout(timer);
+						reject(ex);
+					}
+				});
+			}
 		} catch (ex) {
 			if (!timedOut) {
+				// The executor is not an async function, and something threw inside of it
 				clearTimeout(timer);
 				reject(ex);
 			}

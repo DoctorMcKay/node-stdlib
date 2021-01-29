@@ -1,5 +1,4 @@
-const callbackPromise = require('../index.js').Promises.callbackPromise;
-const timeoutPromise = require('../index.js').Promises.timeoutPromise;
+const {callbackPromise, timeoutPromise, retryPromise} = require('../index.js').Promises;
 
 // non-optional; non-immediate
 callbackPromise(['foo', 'bar'], verifyFooBarCallback, execAccept);                                              // callback only
@@ -53,6 +52,38 @@ timeoutPromise(5000, execAcceptImmediate).then(verifyFooBarPromise).catch(verify
 
 timeoutPromise(1000, execThrowError).then(verifyNotCalled).catch(verifyError);
 timeoutPromise(1000, execPromiseReject).then(verifyNotCalled).catch(verifyError);
+
+// retry promises
+let retryCounter = 0;
+retryPromise(5, 100, (resolve, reject) => {
+	retryCounter++;
+	reject(new Error('retryPromise rejection'));
+}).catch((ex) => {
+	if (retryCounter !== 5) {
+		throw new Error('retryCounter (' + retryCounter + ') !== 5');
+	}
+	
+	if (ex.message !== 'retryPromise rejection') {
+		throw new Error('ex.message (\'' + ex.message + '\') !== \'retryPromise rejection\'');
+	}
+	
+	console.log('retryPromise passed');
+});
+
+let retryCounter2 = 0;
+retryPromise(5, 100, (resolve, reject) => {
+	if (++retryCounter2 >= 3) {
+		resolve();
+	} else {
+		reject(new Error('retryPromise rejection 2'));
+	}
+}).then(() => {
+	if (retryCounter2 !== 3) {
+		throw new Error('retryCounter2 (' + retryCounter2 + ') !== 3');
+	}
+	
+	console.log('Successful retryPromise passed');
+});
 
 ///////
 

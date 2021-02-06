@@ -40,7 +40,7 @@ namespace).
 - [Rendering](#rendering)
     - [progressBar](#progressbarvalue-maxvalue-barwidth-showpercentage)
 - [Time](#time)
-    - [timestampString](#timestampstring-)
+    - [timestampString](#timestampstring)
 - [Units](#units)
     - [humanReadableBytes](#humanreadablebytesbytes-binary)
 
@@ -128,7 +128,7 @@ worker.
 ### concurrency
 
 A property indicating your concurrency limit. You can assign to this to change the concurrency limit, but it will only
-take effect the next time you push an item into the queue or the next time a worker finishes.
+take effect the next time you push an item into the queue, or the next time a worker finishes.
 
 ### worker
 
@@ -348,7 +348,7 @@ const {Objects} = require('@doctormckay/stdlib');
 ```
 
 ### clone(obj)
-- `obj` - Some value to clone (may be any type)
+- `obj` - Some value to clone (may be of any type)
 
 Clones a value, and all its sub-objects.
 
@@ -408,7 +408,7 @@ If a promise times out, then it will be rejected with an `Error` object with mes
 
 Creates and returns a promise that can also be used to fire a callback, for supporting both promises and callbacks.
 
-### callbackTimeoutPromise(timeout, callbackArgs, callback, [isOptional, ]executor)
+### timeoutCallbackPromise(timeout, callbackArgs, callback, [isOptional, ]executor)
 - `timeout` - Timeout in milliseconds. If this value is <= 0, then the timeout functionality is disabled.
 - `callbackArgs` - An array of strings indicating the names and order of arguments in the callback. `null` to just pass the entire promise result object
 - `callback` - A callback function, or falsy if none

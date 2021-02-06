@@ -37,6 +37,8 @@ namespace).
     - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
     - [timeoutCallbackPromise](#timeoutcallbackpromisetimeout-callbackargs-callback-isoptional-executor)
     - [sleepAsync](#sleepasyncsleepmilliseconds)
+- [Rendering](#rendering)
+    - [progressBar](#progressbarvalue-maxvalue-barwidth-showpercentage)
 - [Time](#time)
     - [timestampString](#timestampstring-)
 - [Units](#units)
@@ -45,8 +47,7 @@ namespace).
 # Arrays
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Arrays = StdLib.Arrays;
+const {Arrays} = require('@doctormckay/stdlib');
 ```
 
 ## unique(array[, strict])
@@ -60,8 +61,8 @@ Returns an array containing only the unique elements from the input array, in th
 ## Semaphore
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-let sem = new StdLib.Concurrency.Semaphore();
+const {Concurrency} = require('@doctormckay/stdlib');
+let sem = new Concurrency.Semaphore();
 ```
 
 A semaphore for ensuring only one (or some number) concurrent asynchronous task runs at once.
@@ -90,8 +91,8 @@ result in the callback being immediately invoked.
 ## AsyncQueue
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-let queue = new StdLib.DataStructures.AsyncQueue(processItemSomehow, 2);
+const {DataStructures} = require('@doctormckay/stdlib');
+let queue = new DataStructures.AsyncQueue(processItemSomehow, 2);
 ```
 
 A Queue that automatically pops the first element from the array and runs the async `worker` on it, up to your set
@@ -163,8 +164,8 @@ The first argument to the function is the error, and the second is the item that
 ## LeastUsedCache
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-let cache = new StdLib.DataStructures.LeastUsedCache(100, 30000);
+const {DataStructures} = require('@doctormckay/stdlib');
+let cache = new DataStructures.LeastUsedCache(100, 30000);
 ```
 
 ### Constructor(maxItems, gcInterval)
@@ -203,8 +204,8 @@ Manually collects garbage immediately, without waiting for the proper timeout.
 ## Queue
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-let queue = new StdLib.DataStructures.Queue();
+const {DataStructures} = require('@doctormckay/stdlib');
+let queue = new DataStructures.Queue();
 ```
 
 Just a basic queue, implemented as a doubly-linked list.
@@ -232,8 +233,8 @@ A property indicating how many items are in the queue.
 ## Stack
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-let stack = new StdLib.DataStructures.Stack();
+const {DataStructures} = require('@doctormckay/stdlib');
+let stack = new DataStructures.Stack();
 ```
 
 Just a basic stack, implemented as a linked list.
@@ -261,8 +262,7 @@ A property indicating how many items are on the stack.
 # Hashing
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Hashing = StdLib.Hashing;
+const {Hashing} = require('@doctormckay/stdlib');
 ```
 
 ### md5(input[, outputForm])
@@ -293,8 +293,7 @@ Return the CRC32 hash of the input.
 # HTTP
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const HTTP = StdLib.HTTP;
+const {HTTP} = require('@doctormckay/stdlib');
 ```
 
 ### getProxyAgent(secure[, proxyUrl[, proxyTimeout]])
@@ -329,8 +328,7 @@ HTTPS.get({
 # IPv4
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const IPv4 = StdLib.IPv4;
+const {IPv4} = require('@doctormckay/stdlib');
 ```
 
 ### intToString(ipInt)
@@ -346,8 +344,7 @@ Returns a 32-bit unsigned integer representation of the input IP address.
 # Objects
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Objects = StdLib.Objects;
+const {Objects} = require('@doctormckay/stdlib');
 ```
 
 ### clone(obj)
@@ -368,8 +365,7 @@ The order of properties is not considered, except in arrays.
 # Parsing
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Parsing = StdLib.Parsing;
+const {Parsing} = require('@doctormckay/stdlib');
 ```
 
 ### orderedArgs(input)
@@ -393,8 +389,7 @@ one two\ two three four         => ["one", "two two", "three", "four"]
 # Promises
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Promises = StdLib.Promises;
+const {Promises} = require('@doctormckay/stdlib');
 ```
 
 ### timeoutPromise(timeout, executor)
@@ -427,11 +422,25 @@ Creates and returns a promise that has properties of both `timeoutPromise` and `
 
 Returns a Promise that is resolved after the specified delay.
 
+# Rendering
+
+```js
+const {Rendering} = require('@doctormckay/stdlib');
+```
+
+### progressBar(value, maxValue, barWidth, showPercentage)
+- `value` - The current value of the progress bar, as a number
+- `maxValue` - The maximum value of the progress bar, as a number
+- `barWidth` - The width of the bar in characters, including the containing square brackets
+- `showPercentage` - Pass `true` to display the bar's current percentage in the center of it (default `false`)
+
+Returns a string containing an ASCII progress bar. For best results when using `showPercentage`, `barWidth` should be
+an odd number.
+
 # Time
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Time = StdLib.Time;
+const {Time} = require('@doctormckay/stdlib');
 ```
 
 ### timestampString()
@@ -441,8 +450,7 @@ Returns a string containing the current 24-hour time in your local timezone in t
 # Units
 
 ```js
-const StdLib = require('@doctormckay/stdlib');
-const Units = StdLib.Units;
+const {Units} = require('@doctormckay/stdlib');
 ```
 
 ### humanReadableBytes(bytes[, binary])

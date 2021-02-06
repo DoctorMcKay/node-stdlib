@@ -9,5 +9,6 @@ StdLib.IPv4 = require('./components/ipv4.js');
 StdLib.Objects = require('./components/objects.js');
 StdLib.Parsing = require('./components/parsing.js');
 StdLib.Promises = require('./components/promises.js');
+StdLib.Rendering = require('./components/rendering.js');
 StdLib.Time = require('./components/time.js');
 StdLib.Units = require('./components/units.js');

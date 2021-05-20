@@ -18,12 +18,7 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 	let agent = new (secure ? HTTPS : HTTP).Agent({"keepAlive": false});
 	agent.createConnection = function(options, callback) {
 		let url = URL.parse(proxyUrl);
-		let prox = {};
-		for (let i in url) {
-			if (url.hasOwnProperty(i)) {
-				prox[i] = url[i];
-			}
-		}
+		let prox = Object.assign({}, url);
 
 		prox.method = 'CONNECT';
 		prox.path = options.host + ':' + options.port; // the host where we want the proxy to connect
@@ -68,11 +63,7 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 
 			let tlsOptions = {"socket": socket};
 			for (let i in options) {
-				if (!options.hasOwnProperty(i)) {
-					continue;
-				}
-
-				if (i.match(/^_/) || ['agent', 'headers'].indexOf(i) != -1) {
+				if (i.match(/^_/) || ['agent', 'headers'].includes(i)) {
 					// Ignore private properties, and "agent" and "headers"
 					continue;
 				}

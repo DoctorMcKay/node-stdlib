@@ -12,10 +12,6 @@ Objects.clone = function(obj) {
 
 	let outObj = Array.isArray(obj) ? obj.slice(0) : {};
 	for (let i in obj) {
-		if (!obj.hasOwnProperty(i)) {
-			continue;
-		}
-
 		outObj[i] = Objects.clone(obj[i]);
 	}
 
@@ -44,10 +40,6 @@ Objects.deepEqual = function(obj1, obj2, strict) {
 	}
 
 	for (let i in obj1) {
-		if (!obj1.hasOwnProperty(i)) {
-			continue;
-		}
-
 		if (!Objects.deepEqual(obj1[i], obj2[i], strict)) {
 			return false;
 		}

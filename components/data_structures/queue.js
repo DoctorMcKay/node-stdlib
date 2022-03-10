@@ -8,15 +8,15 @@ module.exports = Queue;
 function Queue() {
 	this.length = 0;
 	Object.defineProperties(this, {
-		"_head": {
-			"enumerable": false,
-			"writable": true,
-			"value": null
+		_head: {
+			enumerable: false,
+			writable: true,
+			value: null
 		},
-		"_tail": {
-			"enumerable": false,
-			"writable": true,
-			"value": null
+		_tail: {
+			enumerable: false,
+			writable: true,
+			value: null
 		}
 	});
 }
@@ -28,7 +28,7 @@ function Queue() {
  */
 Queue.prototype.enqueue = Queue.prototype.push = function(item) {
 	// Create the DLL node. The "next" pointer is empty and the "prev" pointer is the existing tail of the list.
-	let entry = {"data": item, "next": null, "prev": this._tail};
+	let entry = {data: item, next: null, prev: this._tail};
 
 	if (this._tail) {
 		// If we already have a tail, make its next pointer point to this node.
@@ -42,6 +42,23 @@ Queue.prototype.enqueue = Queue.prototype.push = function(item) {
 
 	// This node is now our new tail
 	this._tail = entry;
+	return ++this.length;
+};
+
+/**
+ * Inserts a new item into the front of the queue.
+ * @param {*} item - The item to insert into the queue
+ * @return {int} The new length of the queue
+ */
+Queue.prototype.insert = function(item) {
+	let entry = {data: item, next: this._head, prev: null};
+	this._head = entry;
+
+	// If we didn't previously have a tail, make this the tail as well
+	if (!this._tail) {
+		this._tail = entry;
+	}
+
 	return ++this.length;
 };
 

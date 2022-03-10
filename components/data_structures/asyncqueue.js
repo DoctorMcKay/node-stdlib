@@ -14,7 +14,7 @@ function AsyncQueue(worker, concurrency) {
 	this.running = 0;
 	this.paused = false;
 	this.length = 0;
-	Object.defineProperty(this, "_queue", {"enumerable": false, "writable": false, "value": new Queue()});
+	Object.defineProperty(this, '_queue', {enumerable: false, writable: false, value: new Queue()});
 }
 
 /**
@@ -39,7 +39,7 @@ AsyncQueue.prototype.kill = function() {
 	delete this.drain;
 	delete this.empty;
 
-	Object.defineProperty(this, 'killed', {"enumerable": true, "value": true, "writable": false});
+	Object.defineProperty(this, 'killed', {enumerable: true, value: true, writable: false});
 	this._queue.empty();
 };
 
@@ -51,10 +51,26 @@ AsyncQueue.prototype.kill = function() {
  */
 AsyncQueue.prototype.enqueue = AsyncQueue.prototype.push = function(item, callback) {
 	if (this.killed) {
-		throw new Error("Cannot push items into a killed AsyncQueue");
+		throw new Error('Cannot push items into a killed AsyncQueue');
 	}
 
-	this.length = this._queue.push({"data": item, "callback": callback});
+	this.length = this._queue.push({data: item, callback});
+	process.nextTick(this._process.bind(this));
+	return this.length;
+};
+
+/**
+ * Insert a new item into the front of the queue.
+ * @param {*} item - The item to push into the queue
+ * @param {function} [callback] - A callback to be invoked after this item is finished processing, which takes arguments (err, result)
+ * @return {int} The new length of the queue
+ */
+AsyncQueue.prototype.insert = function(item, callback) {
+	if (this.killed) {
+		throw new Error('Cannot insert items into a killed AsyncQueue');
+	}
+
+	this.length = this._queue.insert({data: item, callback});
 	process.nextTick(this._process.bind(this));
 	return this.length;
 };

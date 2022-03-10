@@ -3,12 +3,16 @@ const StdLib = require('../index.js');
 let queue = new StdLib.DataStructures.Queue();
 checkQueueLength(queue, 0);
 
-queue.push("first");
-queue.enqueue("second");
+queue.push('second');
+queue.enqueue('third');
+queue.insert('first');
+checkQueueLength(queue, 3);
+checkQueuePop(queue, 'first');
 checkQueueLength(queue, 2);
-checkQueuePop(queue, "first");
+checkQueuePop(queue, 'second');
 checkQueueLength(queue, 1);
-checkQueuePop(queue, "second");
+checkQueuePop(queue, 'third');
+checkQueueLength(queue, 0);
 console.log("All tests passed");
 
 function checkQueueLength(queue, length) {

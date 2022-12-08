@@ -1,6 +1,19 @@
 const HTTP = require('http');
 const HTTPS = require('https');
-const TLS = require('tls');
+/** @type {typeof require("tls")} */
+const TLS = (() => {
+	// FIXME: Remove this once bun ships with `tls`.
+	try {
+		// NOTE: Instead of just using a ternary operator we do it this way to be forwards-compatible with future
+		// versions of bun that have implemented `tls`.
+		return require('tls');
+	} catch (error) {
+		if (typeof(Bun) !== 'undefined')
+			return Bun;
+		
+		throw error;
+	}
+})();
 const URL = require('url');
 
 /**

@@ -7,6 +7,10 @@ const Promises = module.exports;
  * @returns {Promise}
  */
 Promises.timeoutPromise = function(timeout, executor) {
+	// We have to create the Error here in order to have a useful stack trace.
+	// If we create it inside of the timer callback, we don't get anything helpful.
+	let err = new Error('Request timed out');
+
 	return new Promise((resolve, reject) => {
 		let timedOut = false;
 		let timer = null;
@@ -14,7 +18,7 @@ Promises.timeoutPromise = function(timeout, executor) {
 		if (timeout > 0) {
 			timer = setTimeout(() => {
 				timedOut = true;
-				reject(new Error('Request timed out'));
+				reject(err);
 			}, timeout);
 		}
 

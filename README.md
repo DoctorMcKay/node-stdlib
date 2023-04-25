@@ -351,7 +351,7 @@ console.log(response.jsonBody);
 ```
 
 
-# Ipv4
+# IPv4
 
 ```js
 const {Ipv4} = require('@doctormckay/stdlib');

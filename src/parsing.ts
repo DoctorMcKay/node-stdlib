@@ -6,4 +6,8 @@ const Parsing:ModuleType = {
 	orderedArgs
 };
 
+export {
+	orderedArgs
+};
+
 export default Parsing;

@@ -6,4 +6,8 @@ const Http:ModuleType = {
 	getProxyAgent
 };
 
+export {
+	getProxyAgent
+};
+
 export default Http;

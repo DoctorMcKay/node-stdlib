@@ -11,38 +11,39 @@ namespace).
 - [Arrays](#arrays)
 	- [unique](#uniquearray-strict)
 - [Concurrency](#concurrency)
-    - [Semaphore](#semaphore)
+	- [Semaphore](#semaphore)
 - [Data Structures](#data-structures)
-    - [AsyncQueue](#asyncqueue)
-    - [LeastUsedCache](#leastusedcache)
-    - [Stack](#stack)
-    - [Queue](#queue)
+	- [AsyncQueue](#asyncqueue)
+	- [LeastUsedCache](#leastusedcache)
+	- [Stack](#stack)
+	- [Queue](#queue)
 - [Hashing](#hashing)
-    - [md5](#md5input-outputform)
-    - [sha1](#sha1input-outputform)
-    - [sha256](#sha256input-outputform)
-    - [crc32](#crc32input-outputform)
+	- [md5](#md5input-outputform)
+	- [sha1](#sha1input-outputform)
+	- [sha256](#sha256input-outputform)
+	- [crc32](#crc32input-outputform)
 - [HTTP](#http)
-    - [getProxyAgent](#getproxyagentsecure-proxyurl-proxytimeout)
+	- [getProxyAgent](#getproxyagentsecure-proxyurl-proxytimeout)
+	- [HttpClient](#httpclient)
 - [Ipv4](#ipv4)
-    - [intToString](#inttostringipint)
-    - [stringToInt](#stringtointipstring)
+	- [intToString](#inttostringipint)
+	- [stringToInt](#stringtointipstring)
 - [Objects](#objects)
 	- [clone](#cloneobj)
 	- [deepEqual](#deepequalobj1-obj2-strict)
 - [Parsing](#parsing)
-    - [orderedArgs](#orderedargsinput)
+	- [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
-    - [timeoutPromise](#timeoutpromisetimeout-executor)
-    - [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
-    - [timeoutCallbackPromise](#timeoutcallbackpromisetimeout-callbackargs-callback-isoptional-executor)
-    - [sleepAsync](#sleepasyncsleepmilliseconds)
+	- [timeoutPromise](#timeoutpromisetimeout-executor)
+	- [callbackPromise](#callbackpromisecallbackargs-callback-isoptional-executor)
+	- [timeoutCallbackPromise](#timeoutcallbackpromisetimeout-callbackargs-callback-isoptional-executor)
+	- [sleepAsync](#sleepasyncsleepmilliseconds)
 - [Rendering](#rendering)
-    - [progressBar](#progressbarvalue-maxvalue-barwidth-showpercentage)
+	- [progressBar](#progressbarvalue-maxvalue-barwidth-showpercentage)
 - [Time](#time)
-    - [timestampString](#timestampstring)
+	- [timestampString](#timestampstring)
 - [Units](#units)
-    - [humanReadableBytes](#humanreadablebytesbytes-binary)
+	- [humanReadableBytes](#humanreadablebytesbytes-binary)
 
 # Arrays
 
@@ -76,7 +77,7 @@ Creates a new Semaphore with some concurrency limit.
 
 ### wait(callback)
 - `callback` - A function to be called when waiting is over
-    - `release` - A function you need to call once you're done to release the semaphore
+	- `release` - A function you need to call once you're done to release the semaphore
 
 Waits for the semaphore to be free. Once free, the function provided will be called. If the semaphore is already free,
 the callback will be invoked immediately.
@@ -103,8 +104,8 @@ A Queue that automatically pops the first element from the array and runs the as
 
 ### Constructor(worker[, concurrency])
 - `worker` - A function that will be invoked every time an item is popped from the queue. This function should take these arguments:
-    - `item` - The item that you pushed into the queue
-    - `callback` - A function you should call once processing is finished for the item. The first argument to this callback should be an `Error` if the processing failed, or `null` if it succeeded. Any remaining arguments are passed as-is to the callback passed in the `push` method.
+	- `item` - The item that you pushed into the queue
+	- `callback` - A function you should call once processing is finished for the item. The first argument to this callback should be an `Error` if the processing failed, or `null` if it succeeded. Any remaining arguments are passed as-is to the callback passed in the `push` method.
 
 ### pause()
 
@@ -297,6 +298,7 @@ Return the CRC32 hash of the input.
 
 ```js
 const {HTTP} = require('@doctormckay/stdlib');
+import {getProxyAgent, HttpClient} from '@doctormckay/stdlib/http';
 ```
 
 ### getProxyAgent(secure[, proxyUrl[, proxyTimeout]])
@@ -315,16 +317,37 @@ HTTPS.get({
   port: 443,
   agent: StdLib.HTTP.getProxyAgent(true, "http://user:pass@1.2.3.4:12345", 10000)
 }, (res) => {
-    if (res.statusCode != 200) {
-        console.log("HTTP error: " + res.statusCode);
-    }
-    
-    res.on('data', (chunk) => {
-        console.log(chunk.toString('utf8'));
-    });
+	if (res.statusCode != 200) {
+		console.log("HTTP error: " + res.statusCode);
+	}
+	
+	res.on('data', (chunk) => {
+		console.log(chunk.toString('utf8'));
+	});
 }).on('error', (err) => {
-    console.log(err);
+	console.log(err);
 });
+```
+
+### HttpClient
+
+[See types here.](https://github.com/DoctorMcKay/node-stdlib/blob/feat/http-client/src/lib/http/client/types.ts)
+
+```js
+import {HttpClient, HttpClientOptions, HttpRequestOptions, HttpResponse} from '@doctormckay/stdlib/http';
+
+let client = new HttpClient({
+	defaultHeaders: {'user-agent': 'my super cool app'},
+	cookieJar: true
+});
+
+let response = await client.request({
+	method: 'GET',
+	url: 'https://tools.learningcontainer.com/sample-json.json'
+});
+
+console.log(response.statusCode);
+console.log(response.jsonBody);
 ```
 
 

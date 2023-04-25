@@ -96,7 +96,9 @@ export default class HttpClient extends EventEmitter {
 					if (contentType == 'application/json') {
 						try {
 							response.jsonBody = JSON.parse(response.textBody);
-						} catch (ex) {}
+						} catch (ex) {
+							// don't care
+						}
 					}
 
 					if (options.followRedirects && REDIRECT_STATUS_CODES.includes(res.statusCode) && res.headers.location) {
@@ -234,5 +236,5 @@ function buildUrl(urlObj: any): string {
 	let portAppend = (urlObj.protocol == 'http:' && urlObj.port != 80) ||
 		(urlObj.protocol == 'https:' && urlObj.port != 443);
 
-	return `${urlObj.protocol}//${urlObj.host}${portAppend ? `:${urlObj.port}` : ''}${urlObj.path}`
+	return `${urlObj.protocol}//${urlObj.host}${portAppend ? `:${urlObj.port}` : ''}${urlObj.path}`;
 }

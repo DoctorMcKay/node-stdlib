@@ -1,4 +1,5 @@
 import {Agent} from 'http';
+import HttpClient from '../http/client/HttpClient';
 
 export interface Arrays {
 	unique: (array: any[], strict: boolean) => any[]
@@ -12,6 +13,7 @@ export interface Hashing {
 }
 
 export interface Http {
+	HttpClient: typeof HttpClient,
 	getProxyAgent: (secure: boolean, proxyUrl: string, proxyTimeout: number) => boolean|Agent;
 }
 

@@ -1,4 +1,6 @@
 import {Agent} from 'http';
+import Cookie from '../http/client/Cookie';
+import CookieJar from '../http/client/CookieJar';
 import HttpClient from '../http/client/HttpClient';
 
 export interface Arrays {
@@ -14,6 +16,8 @@ export interface Hashing {
 
 export interface Http {
 	HttpClient: typeof HttpClient,
+	Cookie: typeof Cookie,
+	CookieJar: typeof CookieJar,
 	getProxyAgent: (secure: boolean, proxyUrl: string, proxyTimeout: number) => boolean|Agent;
 }
 

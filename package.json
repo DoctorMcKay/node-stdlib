@@ -15,6 +15,9 @@
 		"*.map",
 		"/lib"
 	],
+	"dependencies": {
+		"psl": "^1.9.0"
+	},
 	"devDependencies": {
 		"@types/node": "^12.20.55",
 		"@typescript-eslint/eslint-plugin": "^5.36.0",

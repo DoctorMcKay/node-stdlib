@@ -5,6 +5,7 @@ import {stringify as encodeQueryString} from 'querystring';
 
 import {HttpClientOptions, HttpRequestOptions, HttpResponse} from './types';
 import {clone} from '../../../objects';
+import CookieJar from './CookieJar';
 
 const BODY_TYPES = ['body', 'urlEncodedForm', 'multipartForm', 'json'];
 const METHODS_WITHOUT_BODY = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
@@ -19,6 +20,8 @@ const UTF8_PARSEABLE_CONTENT_TYPES = [
 const REDIRECT_STATUS_CODES = [301, 302, 303, 307, 308];
 
 export default class HttpClient extends EventEmitter {
+	cookieJar?: CookieJar;
+
 	#httpAgent: HttpAgent;
 	#httpsAgent: HttpsAgent;
 	#localAddress?: string;
@@ -33,6 +36,10 @@ export default class HttpClient extends EventEmitter {
 		this.#httpsAgent = options.httpsAgent || new HttpsAgent({keepAlive: true});
 		this.#localAddress = options.localAddress;
 		this.#defaultHeaders = options.defaultHeaders || {};
+
+		if (options.cookieJar) {
+			this.cookieJar = options.cookieJar === true ? new CookieJar() : options.cookieJar;
+		}
 	}
 
 	request(options: HttpRequestOptions): Promise<HttpResponse> {
@@ -53,19 +60,29 @@ export default class HttpClient extends EventEmitter {
 						statusMessage: res.statusMessage,
 						url: buildUrl(nodeOptions),
 						headers: res.headers as {[name: string]: string},
-						body: Buffer.concat(bodyChunks)
+						rawBody: Buffer.concat(bodyChunks)
 					};
 
 					this.emit('debug', 'response', `${nodeOptions.method} ${buildUrl(nodeOptions)} ${res.statusCode} ${res.statusMessage} ${res.headers['content-type']}`);
 
+					if (this.cookieJar) {
+						let setCookieHeader = response.headers['set-cookie'] || [];
+						if (!Array.isArray(setCookieHeader)) {
+							setCookieHeader = [setCookieHeader];
+						}
+						setCookieHeader.forEach((setCookie) => {
+							this.cookieJar.add(setCookie, nodeOptions.host);
+						});
+					}
+
 					let contentType = (res.headers['content-type'] || '').split(';')[0].trim();
 					if (contentType.startsWith('text/') || UTF8_PARSEABLE_CONTENT_TYPES.includes(contentType)) {
-						response.body = response.body.toString('utf8');
+						response.textBody = response.rawBody.toString('utf8');
 					}
 
 					if (contentType == 'application/json') {
 						try {
-							response.body = JSON.parse(response.body as string);
+							response.jsonBody = JSON.parse(response.textBody);
 						} catch (ex) {}
 					}
 
@@ -107,6 +124,14 @@ export default class HttpClient extends EventEmitter {
 		nodeOptions.agent = url.protocol == 'http:' ? this.#httpAgent : this.#httpsAgent;
 		nodeOptions.localAddress = this.#localAddress;
 		nodeOptions.headers = {...this.#defaultHeaders, ...(options.headers || {})};
+
+		if (this.cookieJar) {
+			let cookieHeaderValue = this.cookieJar.getCookieHeaderForUrl(options.url);
+			if (cookieHeaderValue.length > 0) {
+				let existingCookieHeader = options.headers.cookie;
+				nodeOptions.headers.cookie = (existingCookieHeader ? `${existingCookieHeader}; ` : '') + cookieHeaderValue;
+			}
+		}
 
 		return nodeOptions;
 	}

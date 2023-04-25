@@ -2,10 +2,12 @@ import {EventEmitter} from 'events';
 import {request as httpRequest, Agent as HttpAgent, RequestOptions as NodeRequestOptions} from 'http';
 import {request as httpsRequest, Agent as HttpsAgent} from 'https';
 import {stringify as encodeQueryString} from 'querystring';
+import {createGunzip} from 'zlib';
 
 import {HttpClientOptions, HttpRequestOptions, HttpResponse} from './types';
 import {clone} from '../../../objects';
 import CookieJar from './CookieJar';
+import {Readable} from 'stream';
 
 const BODY_TYPES = ['body', 'urlEncodedForm', 'multipartForm', 'json'];
 const METHODS_WITHOUT_BODY = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
@@ -26,6 +28,7 @@ export default class HttpClient extends EventEmitter {
 	#httpsAgent: HttpsAgent;
 	#localAddress?: string;
 	#defaultHeaders: {[name: string]: string|number};
+	#gzip: boolean;
 
 	constructor(options?: HttpClientOptions) {
 		super();
@@ -36,6 +39,7 @@ export default class HttpClient extends EventEmitter {
 		this.#httpsAgent = options.httpsAgent || new HttpsAgent({keepAlive: true});
 		this.#localAddress = options.localAddress;
 		this.#defaultHeaders = options.defaultHeaders || {};
+		this.#gzip = options.gzip !== false;
 
 		if (options.cookieJar) {
 			this.cookieJar = options.cookieJar === true ? new CookieJar() : options.cookieJar;
@@ -53,8 +57,17 @@ export default class HttpClient extends EventEmitter {
 
 			let req = reqFunc(nodeOptions, (res) => {
 				let bodyChunks:Buffer[] = [];
-				res.on('data', chunk => bodyChunks.push(chunk));
-				res.on('end', () => {
+				let responseStream:Readable = res;
+
+				if (res.headers['content-encoding'] == 'gzip') {
+					this.emit('debug', 'decompressing gzipped response');
+					let gzipStream = createGunzip();
+					responseStream.pipe(gzipStream);
+					responseStream = gzipStream;
+				}
+
+				responseStream.on('data', chunk => bodyChunks.push(chunk));
+				responseStream.on('end', () => {
 					let response:HttpResponse = {
 						statusCode: res.statusCode,
 						statusMessage: res.statusMessage,
@@ -131,6 +144,10 @@ export default class HttpClient extends EventEmitter {
 				let existingCookieHeader = options.headers.cookie;
 				nodeOptions.headers.cookie = (existingCookieHeader ? `${existingCookieHeader}; ` : '') + cookieHeaderValue;
 			}
+		}
+
+		if (this.#gzip) {
+			nodeOptions.headers['accept-encoding'] = 'gzip';
 		}
 
 		return nodeOptions;

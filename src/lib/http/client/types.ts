@@ -8,6 +8,7 @@ export interface HttpClientOptions {
 	localAddress?: string;
 	defaultHeaders?: {[name: string]: string|number};
 	cookieJar?: CookieJar|boolean;
+	gzip?: boolean;
 }
 
 export interface HttpRequestOptions {

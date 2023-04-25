@@ -24,6 +24,7 @@
 		"typescript": "^4.8.2"
 	},
 	"scripts": {
+		"prepare": "npm run build",
 		"test": "node test/_test.js",
 		"delete-build": "node scripts/delete-dist.js",
 		"lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",

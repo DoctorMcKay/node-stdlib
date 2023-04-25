@@ -331,7 +331,7 @@ HTTPS.get({
 
 ### HttpClient
 
-[See types here.](https://github.com/DoctorMcKay/node-stdlib/blob/feat/http-client/src/lib/http/client/types.ts)
+[See types here.](https://github.com/DoctorMcKay/node-stdlib/blob/master/src/lib/http/client/types.ts)
 
 ```js
 import {HttpClient, HttpClientOptions, HttpRequestOptions, HttpResponse} from '@doctormckay/stdlib/http';

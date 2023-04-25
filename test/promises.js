@@ -1,4 +1,4 @@
-const {callbackPromise, timeoutPromise, retryPromise} = require('../index.js').Promises;
+const {callbackPromise, timeoutPromise, retryPromise} = require('../_main.js').Promises;
 
 // non-optional; non-immediate
 callbackPromise(['foo', 'bar'], verifyFooBarCallback, execAccept);                                              // callback only

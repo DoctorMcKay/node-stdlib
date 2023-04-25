@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 const IPv4 = StdLib.IPv4;
 
 let localhostInt = 2130706433;

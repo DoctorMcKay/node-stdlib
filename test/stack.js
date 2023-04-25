@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 
 let stack = new StdLib.DataStructures.Stack();
 checkStackLength(stack, 0);

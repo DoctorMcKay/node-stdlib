@@ -1,4 +1,4 @@
-const {Rendering} = require('../index.js');
+const {Rendering} = require('../_main.js');
 
 valueMustEqual(Rendering.progressBar(99, 100, 41, true), '[================= 99% ================>]');
 valueMustEqual(Rendering.progressBar(99, 100, 41), '[======================================>]');

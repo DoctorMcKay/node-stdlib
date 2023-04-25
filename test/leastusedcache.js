@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 
 let cache = new StdLib.DataStructures.LeastUsedCache(5, 1000);
 cache.add("one", 1);

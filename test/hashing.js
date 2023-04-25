@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 
 valueMustEqual(StdLib.Hashing.md5('the quick brown fox jumps over the lazy dog'), '77add1d5f41223d5582fca736a5cb335');
 valueMustEqual(StdLib.Hashing.sha1('the quick brown fox jumps over the lazy dog'), '16312751ef9307c3fd1afbcb993cdc80464ba0f1');

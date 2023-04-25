@@ -48,6 +48,7 @@ namespace).
 
 ```js
 const {Arrays} = require('@doctormckay/stdlib');
+import {unique} from '@doctormckay/stdlib/arrays';
 ```
 
 ## unique(array[, strict])
@@ -62,6 +63,7 @@ Returns an array containing only the unique elements from the input array, in th
 
 ```js
 const {Concurrency} = require('@doctormckay/stdlib');
+import {Semaphore} from '@doctormckay/stdlib/concurrency';
 let sem = new Concurrency.Semaphore();
 ```
 
@@ -92,6 +94,7 @@ result in the callback being immediately invoked.
 
 ```js
 const {DataStructures} = require('@doctormckay/stdlib');
+import {AsyncQueue} from '@doctormckay/stdlib/data_structures';
 let queue = new DataStructures.AsyncQueue(processItemSomehow, 2);
 ```
 

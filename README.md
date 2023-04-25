@@ -24,7 +24,7 @@ namespace).
     - [crc32](#crc32input-outputform)
 - [HTTP](#http)
     - [getProxyAgent](#getproxyagentsecure-proxyurl-proxytimeout)
-- [IPv4](#ipv4)
+- [Ipv4](#ipv4)
     - [intToString](#inttostringipint)
     - [stringToInt](#stringtointipstring)
 - [Objects](#objects)
@@ -308,9 +308,9 @@ const StdLib = require('@doctormckay/stdlib');
 const HTTPS = require('https');
 
 HTTPS.get({
-  "host": "icanhazip.com",
-  "port": 443,
-  "agent": StdLib.HTTP.getProxyAgent(true, "http://user:pass@1.2.3.4:12345", 10000)
+  host: 'icanhazip.com',
+  port: 443,
+  agent: StdLib.HTTP.getProxyAgent(true, "http://user:pass@1.2.3.4:12345", 10000)
 }, (res) => {
     if (res.statusCode != 200) {
         console.log("HTTP error: " + res.statusCode);
@@ -325,19 +325,19 @@ HTTPS.get({
 ```
 
 
-# IPv4
+# Ipv4
 
 ```js
-const {IPv4} = require('@doctormckay/stdlib');
+const {Ipv4} = require('@doctormckay/stdlib');
 ```
 
 ### intToString(ipInt)
-- `ipInt` - An integer-format IPv4 address
+- `ipInt` - An integer-format Ipv4 address
 
 Returns a dotted-decimal string representation of the input IP address.
 
 ### stringToInt(ipString)
-- `ipString` - A dotted-decimal string format IPv4 address
+- `ipString` - A dotted-decimal string format Ipv4 address
 
 Returns a 32-bit unsigned integer representation of the input IP address.
 

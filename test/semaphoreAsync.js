@@ -1,47 +1,53 @@
+// noinspection ES6MissingAwait
+
 const StdLib = require('../_main.js');
 const Semaphore = StdLib.Concurrency.Semaphore;
 
 let g_Counter = 0;
-
 let sem = new Semaphore();
-checkSemFree(sem, true);
-let now = Date.now();
-sem.wait((release) => {
+
+main1();
+main2();
+
+async function main1() {
+	checkSemFree(sem, true);
+	let now = Date.now();
+	let release = await sem.waitAsync();
+
 	checkTimeElapsed(now, 0, 100);
 	checkCounter(0);
 	g_Counter++;
 	checkSemFree(sem, false);
 
 	now = Date.now();
-	sem.wait((release2) => {
-		checkTimeElapsed(now, 1000, 1100);
-		checkCounter(2);
-		g_Counter++;
-		checkSemFree(sem, false);
-
-		release2();
-		checkSemFree(sem, true);
-		now = Date.now();
-		sem.wait((release3) => {
-			checkTimeElapsed(now, 0, 100);
-			checkCounter(3);
-			checkSemFree(sem, false);
-			release3();
-			checkSemFree(sem, true);
-		});
-	});
-
+	// When this timeout elapses, we will release to main2()
 	setTimeout(release, 1000);
-});
 
-sem.wait((release) => {
+	let release2 = await sem.waitAsync();
+	checkTimeElapsed(now, 1000, 1100);
+	checkCounter(2);
+	g_Counter++;
+	checkSemFree(sem, false);
+
+	release2();
+	checkSemFree(sem, true);
+	now = Date.now();
+
+	let release3 = await sem.waitAsync();
+	checkTimeElapsed(now, 0, 100);
+	checkCounter(3);
+	checkSemFree(sem, false);
+	release3();
+	checkSemFree(sem, true);
+}
+
+async function main2() {
+	let release = await sem.waitAsync();
 	checkCounter(1);
 	g_Counter++;
 	checkSemFree(sem, false);
 	release();
-	checkSemFree(sem, true); // it should be free at this point because the remaining work is synchronous
-	console.log("All tests passed");
-});
+}
 
 function checkSemFree(sem, shouldBeFree) {
 	let isFree = sem.free;
@@ -70,3 +76,7 @@ function checkTimeElapsed(started, lowerBound, upperBound) {
 		console.log(`Time elapsed passed: ${lowerBound} <= ${elapsedMs} <= ${upperBound}`);
 	}
 }
+
+process.on('unhandledRejection', (ex) => {
+	throw ex;
+});

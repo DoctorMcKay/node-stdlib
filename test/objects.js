@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 const {clone, deepEqual} = StdLib.Objects;
 
 console.log('Testing Objects.clone');

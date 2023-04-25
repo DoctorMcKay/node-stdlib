@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 
 let queue = new StdLib.DataStructures.AsyncQueue((item, callback) => {
 	setTimeout(() => {

@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 const {unique} = StdLib.Arrays;
 
 console.log('Testing Arrays.unique');

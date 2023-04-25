@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 const Units = StdLib.Units;
 
 checkStringEqual("humanReadableBytes(7894561)", "7.9 MB", Units.humanReadableBytes(7894561));

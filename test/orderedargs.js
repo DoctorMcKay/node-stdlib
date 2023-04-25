@@ -1,4 +1,4 @@
-const StdLib = require('../index.js');
+const StdLib = require('../_main.js');
 const orderedArgs = StdLib.Parsing.orderedArgs;
 
 checkArrEqual(orderedArgs('one two three four'), ['one', 'two', 'three', 'four']);

@@ -13,7 +13,7 @@ module.exports = {
 		sourceType: 'module'
 	},
 	ignorePatterns: [
-		'dist/*',
+		'test/*',
 		'dev/*',
 		'scripts/*' // scripts are plain js and can't use all the stuff TS needs
 	],

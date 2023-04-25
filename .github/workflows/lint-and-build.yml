@@ -54,7 +54,7 @@ jobs:
         uses: DoctorMcKay/github-workflows/.github/workflows/npm-pack.yml@master
         with:
             node-version: 12.x
-            package-name: stdlib
+            package-name: doctormckay-stdlib
 
     publish:
         needs: [ lint, test, build ]

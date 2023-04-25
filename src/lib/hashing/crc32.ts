@@ -102,7 +102,7 @@ function _crc32(buf: Buffer|string, previous?: Buffer|number) {
 	return (crc ^ -1);
 }
 
-export default function calc(buf: Buffer|string, outputForm: string): string|number|Buffer {
+export default function calc(buf: Buffer|string, outputForm = 'number'): string|number|Buffer {
 	let crc = _crc32(buf) >>> 0;
 	if (outputForm == 'number') {
 		return crc;

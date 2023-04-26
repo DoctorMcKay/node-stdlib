@@ -1,6 +1,6 @@
 {
 	"name": "@doctormckay/stdlib",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"author": "Alex Corn <mckay@doctormckay.com>",
 	"description": "A \"standard library\" of stuff I find to routinely be useful in Node.js",
 	"license": "MIT",

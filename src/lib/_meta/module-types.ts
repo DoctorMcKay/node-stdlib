@@ -8,17 +8,17 @@ export interface Arrays {
 }
 
 export interface Hashing {
-	md5: (input: string|Buffer, outputForm: string) => string|Buffer;
-	sha1: (input: string|Buffer, outputForm: string) => string|Buffer;
-	sha256: (input: string|Buffer, outputForm: string) => string|Buffer;
-	crc32: (input: string|Buffer, outputForm: string) => string|number|Buffer;
+	md5: (input: string|Buffer, outputForm?: string) => string|Buffer;
+	sha1: (input: string|Buffer, outputForm?: string) => string|Buffer;
+	sha256: (input: string|Buffer, outputForm?: string) => string|Buffer;
+	crc32: (input: string|Buffer, outputForm?: string) => string|number|Buffer;
 }
 
 export interface Http {
 	HttpClient: typeof HttpClient,
 	Cookie: typeof Cookie,
 	CookieJar: typeof CookieJar,
-	getProxyAgent: (secure: boolean, proxyUrl: string, proxyTimeout: number) => boolean|Agent;
+	getProxyAgent: (secure: boolean, proxyUrl: string, proxyTimeout?: number) => boolean|Agent;
 }
 
 export interface IPv4 {
@@ -28,7 +28,7 @@ export interface IPv4 {
 
 export interface Objects {
 	clone: (obj: any) => any;
-	deepEqual: (obj1: any, obj2: any, strict: boolean) => boolean;
+	deepEqual: (obj1: any, obj2: any, strict?: boolean) => boolean;
 }
 
 export interface Parsing {
@@ -72,7 +72,7 @@ export interface Promises {
 }
 
 export interface Rendering {
-	progressBar: (value: number, maxValue: number, barWidth: number, showPercentage: boolean) => string;
+	progressBar: (value: number, maxValue: number, barWidth: number, showPercentage?: boolean) => string;
 }
 
 export interface Time {
@@ -80,5 +80,5 @@ export interface Time {
 }
 
 export interface Units {
-	humanReadableBytes: (bytes: number, binary: boolean, forceDecimal: boolean) => string;
+	humanReadableBytes: (bytes: number, binary?: boolean, forceDecimal?: boolean) => string;
 }

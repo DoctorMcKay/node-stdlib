@@ -1,4 +1,4 @@
-import {Agent as HttpAgent} from 'http';
+import {Agent as HttpAgent, IncomingHttpHeaders} from 'http';
 import {Agent as HttpsAgent} from 'https';
 import CookieJar from './CookieJar';
 
@@ -36,7 +36,7 @@ export interface HttpResponse {
 	statusCode: number;
 	statusMessage: string;
 	url: string; // for detecting destination after a redirect
-	headers: {[name: string]: string};
+	headers: IncomingHttpHeaders;
 	rawBody: Buffer;
 	textBody?: string;
 	jsonBody?: {[name: string]: any};

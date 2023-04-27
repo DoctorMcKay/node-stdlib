@@ -8,6 +8,7 @@ import {HttpClientOptions, HttpRequestOptions, HttpResponse} from './types';
 import {clone} from '../../../objects';
 import CookieJar from './CookieJar';
 import {Readable} from 'stream';
+import {randomBytes} from 'crypto';
 
 const BODY_TYPES = ['body', 'urlEncodedForm', 'multipartForm', 'json'];
 const METHODS_WITHOUT_BODY = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
@@ -210,8 +211,27 @@ function createRequestBody(options: HttpRequestOptions): void {
 	}
 
 	if (options.multipartForm) {
-		// TODO
-		throw new Error('Not yet implemented');
+		let boundary = '-----------------------------' + randomBytes(20).toString('hex');
+		options.headers['content-type'] = `multipart/form-data; boundary=${boundary}`;
+
+		let encodedBodyParts = [];
+		for (let i in options.multipartForm) {
+			let formObject = options.multipartForm[i];
+			let head = `--${boundary}\r\nContent-Disposition: form-data; name="${i}"` +
+				(formObject.filename ? `; filename="${formObject.filename}"` : '') +
+				(formObject.contentType ? `\r\nContent-Type: ${formObject.contentType}` : '') +
+				'\r\n\r\n';
+			let tail = '\r\n';
+
+			encodedBodyParts = encodedBodyParts.concat([
+				Buffer.from(head, 'utf8'),
+				Buffer.isBuffer(formObject.content) ? formObject.content : Buffer.from(formObject.content, 'utf8'),
+				Buffer.from(tail, 'utf8')
+			]);
+		}
+
+		encodedBodyParts.push(Buffer.from(`--${boundary}--\r\n`, 'utf8'));
+		bodyBuffer = Buffer.concat(encodedBodyParts);
 	}
 
 	if (METHODS_WITHOUT_BODY.includes(options.method)) {

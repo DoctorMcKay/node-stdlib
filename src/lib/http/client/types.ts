@@ -25,7 +25,8 @@ export interface HttpRequestOptions {
 }
 
 export interface MultipartFormObject {
-	contentType: string;
+	contentType?: string;
+	filename?: string;
 	content: string|Buffer;
 }
 

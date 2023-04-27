@@ -39,5 +39,5 @@ export interface HttpResponse {
 	headers: {[name: string]: string};
 	rawBody: Buffer;
 	textBody?: string;
-	jsonBody?: object;
+	jsonBody?: {[name: string]: any};
 }

@@ -131,10 +131,26 @@ export default class HttpClient extends EventEmitter {
 		let nodeOptions:NodeRequestOptions = {};
 
 		let url = new URL(options.url);
+
+		let queryString = url.search;
+		if (options.queryString) {
+			if (queryString.length == 0) {
+				queryString += '?';
+			}
+
+			if (!queryString.endsWith('?')) {
+				// If the final character of our query string isn't "?", then we need to append a "&" to separate our new
+				// options from existing options.
+				queryString += '&';
+			}
+
+			queryString += encodeQueryString(options.queryString);
+		}
+
 		nodeOptions.protocol = url.protocol;
 		nodeOptions.host = url.hostname;
 		nodeOptions.port = getPort(url.port, url.protocol);
-		nodeOptions.path = url.pathname + url.search;
+		nodeOptions.path = url.pathname + queryString;
 
 		nodeOptions.method = options.method;
 		nodeOptions.agent = url.protocol == 'http:' ? this.#httpAgent : this.#httpsAgent;

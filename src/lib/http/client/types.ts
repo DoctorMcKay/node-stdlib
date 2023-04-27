@@ -14,10 +14,12 @@ export interface HttpClientOptions {
 export interface HttpRequestOptions {
 	method: string;
 	url: string;
-	headers?: {[name: string]: string|number};
+	queryString?: {[name: string]: any};
+	headers?: {[name: string]: any};
+
 	body?: string|Buffer;
 
-	urlEncodedForm?: {[name: string]: string|number};
+	urlEncodedForm?: {[name: string]: any};
 	multipartForm?: {[name: string]: MultipartFormObject};
 	json?: {[name: string]: any};
 

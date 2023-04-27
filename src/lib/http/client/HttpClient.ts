@@ -4,7 +4,7 @@ import {request as httpsRequest, Agent as HttpsAgent} from 'https';
 import {stringify as encodeQueryString} from 'querystring';
 import {createGunzip} from 'zlib';
 
-import {HttpClientOptions, HttpRequestOptions, HttpResponse} from './types';
+import {HttpClientOptions, HttpRequestOptions, HttpResponse, MultipartFormObject} from './types';
 import {clone} from '../../../objects';
 import CookieJar from './CookieJar';
 import {Readable} from 'stream';
@@ -170,6 +170,14 @@ export default class HttpClient extends EventEmitter {
 		}
 
 		return nodeOptions;
+	}
+
+	static simpleObjectToMultipartForm(obj: {[name: string]: string|Buffer}): {[name: string]: MultipartFormObject} {
+		let multipartForm:{[name: string]: MultipartFormObject} = {};
+		for (let i in obj) {
+			multipartForm[i] = {content: obj[i]};
+		}
+		return multipartForm;
 	}
 }
 

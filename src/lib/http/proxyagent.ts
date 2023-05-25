@@ -18,16 +18,19 @@ export default function getProxyAgent(secure: boolean, proxyUrl: string, proxyTi
 	// @ts-ignore
 	agent.createConnection = function(options, callback) {
 		let url = new URL(proxyUrl);
-		let prox:HttpRequestOptions = Object.assign({}, url);
+		let prox:HttpRequestOptions = {
+			protocol: url.protocol,
+			host: url.hostname,
+			port: url.port
+		};
 
 		prox.method = 'CONNECT';
 		prox.path = options.host + ':' + options.port; // the host where we want the proxy to connect
 		prox.localAddress = options.localAddress;
-		if (prox.auth) {
+		if (url.username) {
 			prox.headers = {
-				'Proxy-Authorization': `Basic ${(new Buffer(prox.auth, 'utf8')).toString('base64')}`
+				'Proxy-Authorization': `Basic ${(Buffer.from(`${url.username}:${url.password || ''}`, 'utf8')).toString('base64')}`
 			};
-			delete prox.auth;
 		}
 
 		// Make the CONNECT request

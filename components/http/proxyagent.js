@@ -18,23 +18,28 @@ module.exports = function(secure, proxyUrl, proxyTimeout) {
 	let agent = new (secure ? HTTPS : HTTP).Agent({"keepAlive": false});
 	agent.createConnection = function(options, callback) {
 		let url = URL.parse(proxyUrl);
-		let prox = Object.assign({}, url);
 
-		prox.method = 'CONNECT';
-		prox.path = options.host + ':' + options.port; // the host where we want the proxy to connect
-		prox.localAddress = options.localAddress;
-		prox.localPort = options.localPort;
-		if (prox.auth) {
+		let prox = {
+			method: 'CONNECT',
+			path: options.host + ':' + options.port, // the host where we want the proxy to connect
+			localAddress: options.localAddress,
+			localPort: options.localPort,
+
+			protocol: url.protocol,
+			host: url.hostname,
+			port: url.port ? parseInt(url.port) : undefined
+		};
+
+		if (url.auth) {
 			prox.headers = {
-				"Proxy-Authorization": "Basic " + (new Buffer(prox.auth, 'utf8')).toString('base64')
+				'Proxy-Authorization': 'Basic ' + (new Buffer(url.auth, 'utf8')).toString('base64')
 			};
-			delete prox.auth;
 		}
 
 		// Make the CONNECT request
 		let finished = false;
 		let didWeEverConnect = false;
-		let req = (prox.protocol == "https:" ? HTTPS : HTTP).request(prox);
+		let req = (prox.protocol == 'https:' ? HTTPS : HTTP).request(prox);
 		req.end();
 		req.setTimeout(proxyTimeout || 5000);
 

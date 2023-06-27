@@ -265,7 +265,7 @@ function createRequestBody(options: HttpRequestOptions): void {
 
 	if (METHODS_WITHOUT_BODY.includes(options.method)) {
 		if (bodyBuffer.length > 0) {
-			throw new Error(`Requests with method "${options.method} may not have a request body`);
+			throw new Error(`Requests with method "${options.method}" may not have a request body`);
 		}
 
 		delete options.headers['content-type'];

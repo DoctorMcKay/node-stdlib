@@ -7,6 +7,7 @@ export interface HttpClientOptions {
 	httpsAgent?: HttpsAgent;
 	localAddress?: string;
 	defaultHeaders?: {[name: string]: string|number};
+	defaultTimeout?: number;
 	cookieJar?: CookieJar|boolean;
 	gzip?: boolean;
 }
@@ -24,6 +25,7 @@ export interface HttpRequestOptions {
 	json?: {[name: string]: any};
 
 	followRedirects?: boolean;
+	timeout?: number;
 }
 
 export interface MultipartFormObject {

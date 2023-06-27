@@ -6,6 +6,7 @@ import {createGunzip} from 'zlib';
 
 import {HttpClientOptions, HttpRequestOptions, HttpResponse, MultipartFormObject} from './types';
 import {clone} from '../../../objects';
+import {timeoutPromise} from '../../../promises';
 import CookieJar from './CookieJar';
 import {Readable} from 'stream';
 import {randomBytes} from 'crypto';
@@ -29,6 +30,7 @@ export default class HttpClient extends EventEmitter {
 	#httpsAgent: HttpsAgent;
 	#localAddress?: string;
 	#defaultHeaders: {[name: string]: string|number};
+	#defaultTimeout: number;
 	#gzip: boolean;
 
 	constructor(options?: HttpClientOptions) {
@@ -40,6 +42,7 @@ export default class HttpClient extends EventEmitter {
 		this.#httpsAgent = options.httpsAgent || new HttpsAgent({keepAlive: true});
 		this.#localAddress = options.localAddress;
 		this.#defaultHeaders = options.defaultHeaders || {};
+		this.#defaultTimeout = options.defaultTimeout || 0;
 		this.#gzip = options.gzip !== false;
 
 		if (options.cookieJar) {
@@ -48,7 +51,9 @@ export default class HttpClient extends EventEmitter {
 	}
 
 	request(options: HttpRequestOptions): Promise<HttpResponse> {
-		return new Promise((resolve, reject) => {
+		let timeout = options.timeout || this.#defaultTimeout || 0;
+
+		return timeoutPromise(timeout, (resolve, reject) => {
 			options = preProcessOptions(options);
 			createRequestBody(options);
 

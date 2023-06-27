@@ -36,6 +36,7 @@ export interface Parsing {
 }
 
 export interface Promises {
+	betterPromise: (executor: (resolve: (value: any) => void, reject: (err: any) => void) => any) => Promise<any>;
 	timeoutPromise: (timeout: number, executor: (resolve: (value: any) => void, reject: (err: any) => void) => any) => Promise<any>;
 
 	callbackPromise: (

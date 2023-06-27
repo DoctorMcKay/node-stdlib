@@ -17,6 +17,17 @@ function callbackPromise(
 }
 
 /**
+ * A "better promise" is just a promise that behaves normally, except if the executor is an async function which rejects,
+ * that bubbles up to reject this promise too.
+ * @param {function} executor
+ */
+function betterPromise(
+	executor: (resolve: (value: any) => void, reject: (value: any) => void) => void
+): Promise<any> {
+	return timeoutPromise(0, executor);
+}
+
+/**
  * Resolves the promise after some specific delay.
  * @param {int} sleepMilliseconds
  * @returns {Promise}
@@ -28,6 +39,7 @@ function sleepAsync(sleepMilliseconds: number): Promise<void> {
 }
 
 const Promises:ModuleType = {
+	betterPromise,
 	retryPromise,
 	timeoutCallbackPromise,
 	timeoutPromise,
@@ -36,6 +48,7 @@ const Promises:ModuleType = {
 };
 
 export {
+	betterPromise,
 	retryPromise,
 	timeoutCallbackPromise,
 	timeoutPromise,

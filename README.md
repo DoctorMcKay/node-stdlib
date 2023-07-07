@@ -30,6 +30,8 @@ namespace).
 - [Objects](#objects)
 	- [clone](#cloneobj)
 	- [deepEqual](#deepequalobj1-obj2-strict)
+- [OS](#os)
+    - [appDataDirectory](#appdatadirectoryparams)
 - [Parsing](#parsing)
     - [orderedArgs](#orderedargsinput)
 - [Promises](#promises)
@@ -361,6 +363,20 @@ Checks whether two values and all their sub-objects are equal, and returns `true
 
 Two objects are considered to be equal if they have all the same properties and each identical property has the same value.
 The order of properties is not considered, except in arrays.
+
+# OS
+
+```js
+const {OS} = require('@doctormckay/stdlib');
+```
+
+### appDataDirectory(params)
+- `params` - An object
+    - `appName` - A string containing your app's name
+    - `appAuthor` - A string containing the name of the author/vendor of your app (only used on Windows)
+    - `useRoaming` - Optional. `true` to use roaming appdata on Windows (default `false`)
+
+Returns a string containing the path to a directory you can use to store app-specific data.
 
 # Parsing
 

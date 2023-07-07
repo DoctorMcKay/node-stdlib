@@ -7,6 +7,7 @@ StdLib.Hashing = require('./components/hashing.js');
 StdLib.HTTP = require('./components/http.js');
 StdLib.IPv4 = require('./components/ipv4.js');
 StdLib.Objects = require('./components/objects.js');
+StdLib.OS = require('./components/os.js');
 StdLib.Parsing = require('./components/parsing.js');
 StdLib.Promises = require('./components/promises.js');
 StdLib.Rendering = require('./components/rendering.js');

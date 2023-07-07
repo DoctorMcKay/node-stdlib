@@ -31,6 +31,8 @@ namespace).
 - [Objects](#objects)
 	- [clone](#cloneobj)
 	- [deepEqual](#deepequalobj1-obj2-strict)
+- [OS](#os)
+    - [appDataDirectory](#appdatadirectoryparams)
 - [Parsing](#parsing)
 	- [orderedArgs](#orderedargsinput)
 - [Promises](#promises)

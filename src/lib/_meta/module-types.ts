@@ -1,3 +1,5 @@
+import {AppDataDirectoryParams} from './os';
+
 import {Agent} from 'http';
 import Cookie from '../http/client/Cookie';
 import CookieJar from '../http/client/CookieJar';
@@ -29,6 +31,10 @@ export interface IPv4 {
 export interface Objects {
 	clone: (obj: any) => any;
 	deepEqual: (obj1: any, obj2: any, strict?: boolean) => boolean;
+}
+
+export interface OS {
+	appDataDirectory: (params: AppDataDirectoryParams) => string;
 }
 
 export interface Parsing {

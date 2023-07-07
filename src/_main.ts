@@ -5,6 +5,7 @@ import Hashing from './hashing';
 import HTTP from './http';
 import IPv4 from './ipv4';
 import Objects from './objects';
+import OS from './os';
 import Parsing from './parsing';
 import Promises from './promises';
 import Rendering from './rendering';
@@ -19,6 +20,7 @@ export {
 	HTTP,
 	IPv4,
 	Objects,
+	OS,
 	Parsing,
 	Promises,
 	Rendering,
@@ -34,6 +36,7 @@ export default {
 	HTTP,
 	IPv4,
 	Objects,
+	OS,
 	Parsing,
 	Promises,
 	Rendering,

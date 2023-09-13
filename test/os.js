@@ -29,6 +29,34 @@ checkValueEqual(
 	join('/', 'home', 'test', '.local', 'share', 'stdlib')
 );
 
+// macOS without HOME
+delete process.env.HOME;
+checkValueEqual(
+	appDataDirectory({appName: 'stdlib', appAuthor: 'doctormckay', platform: 'darwin'}),
+	null
+);
+
+// Windows without APPDATA
+delete process.env.APPDATA;
+delete process.env.LOCALAPPDATA;
+
+checkValueEqual(
+	appDataDirectory({appName: 'stdlib', appAuthor: 'doctormckay', platform: 'win32', useRoaming: false}),
+	null
+);
+checkValueEqual(
+	appDataDirectory({appName: 'stdlib', appAuthor: 'doctormckay', platform: 'win32', useRoaming: true}),
+	null
+);
+
+// Linux without HOME
+delete process.env.HOME;
+delete process.env.XDG_DATA_HOME;
+checkValueEqual(
+	appDataDirectory({appName: 'stdlib', appAuthor: 'doctormckay', platform: 'linux'}),
+	null
+);
+
 function checkValueEqual(value, shouldEqual) {
 	if (value === shouldEqual) {
 		console.log("PASS: " + value + " === " + shouldEqual);

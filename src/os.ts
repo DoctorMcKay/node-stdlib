@@ -10,17 +10,31 @@ function appDataDirectory(params: AppDataDirectoryParams): string {
 
 	switch (params.platform || process.platform) {
 		case 'darwin':
-			return join(process.env.HOME, 'Library', 'Application Support', params.appName);
+			if (process.env.HOME) {
+				return join(process.env.HOME, 'Library', 'Application Support', params.appName);
+			}
+
+			// No HOME env var
+			return null;
 
 		case 'win32':
 			let appDataVar = params.useRoaming ? 'APPDATA' : 'LOCALAPPDATA';
-			return join(process.env[appDataVar] || process.env.APPDATA, params.appAuthor, params.appName);
+			let basePath = process.env[appDataVar] || process.env.APPDATA;
+			if (basePath) {
+				return join(basePath, params.appAuthor, params.appName);
+			}
+
+			// No APPDATA or LOCALAPPDATA env var
+			return null;
 
 		default:
 			if (process.env.XDG_DATA_HOME) {
 				return join(process.env.XDG_DATA_HOME, params.appName);
-			} else {
+			} else if (process.env.HOME) {
 				return join(process.env.HOME, '.local', 'share', params.appName);
+			} else {
+				// No XDG_DATA_HOME or HOME env var
+				return null;
 			}
 	}
 }

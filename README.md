@@ -86,6 +86,19 @@ the callback will be invoked immediately.
 
 Once you're done processing and are ready to release the semaphore, call `release()`.
 
+### waitAsync()
+
+Returns a promise that is resolved when the semaphore is free. The promise resolves with a function `release`, which you
+must call once you're done processing and are ready to release the semaphore.
+
+```js
+import {Semaphore} from '@doctormckay/stdlib/concurrency';
+let sem = new Semaphore();
+let release = await sem.waitAsync();
+// do something
+release();
+```
+
 ### isFree()
 
 Returns `true` if the semaphore is currently free, or `false` if not. A semaphore is free if a call to `wait()` would

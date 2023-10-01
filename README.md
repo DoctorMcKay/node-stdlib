@@ -15,6 +15,7 @@ namespace).
 - [Data Structures](#data-structures)
 	- [AsyncQueue](#asyncqueue)
 	- [LeastUsedCache](#leastusedcache)
+	- [TTLCache](#ttlcache)
 	- [Stack](#stack)
 	- [Queue](#queue)
 - [Hashing](#hashing)
@@ -219,6 +220,40 @@ Checks if garbage collection is necessary at this point in time, and if it is, d
 
 Manually collects garbage immediately, without waiting for the proper timeout.
 
+## TTLCache
+
+```js
+const {DataStructures} = require('@doctormckay/stdlib');
+let cache = new DataStructures.TTLCache(10000);
+```
+
+### Constructor(ttl)
+- `ttl` - The number of milliseconds after which an item will be removed from the cache. If omitted, items will never expire.
+
+### add(key, val, ttl)
+- `key` - A string key
+- `val` - A value, of any type
+- `ttl` - Owerride the default TTL for this item. If omitted, the default TTL will be used, if exists.
+
+Add a new entry to the cache.
+
+### get(key)
+- `key` - A string key
+
+Retrieve a value from the cache. Returns `null` if the key doesn't exist.
+
+### delete(key)
+- `key` - A string key
+
+Delete a value from the cache.
+
+### getKeys()
+
+Returns an array containing all the keys in the cache.
+
+### clear()
+
+Clears the entire cache.
 
 ## Queue
 

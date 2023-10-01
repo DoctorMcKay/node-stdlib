@@ -227,13 +227,13 @@ const {DataStructures} = require('@doctormckay/stdlib');
 let cache = new DataStructures.TTLCache(10000);
 ```
 
-### Constructor(ttl)
-- `ttl` - The number of milliseconds after which an item will be removed from the cache. If omitted, items will never expire.
+### Constructor(ttlMilliseconds)
+- `ttlMilliseconds` - The number of milliseconds after which an item will be removed from the cache.
 
-### add(key, val, ttl)
+### add(key, value[, ttlMilliseconds])
 - `key` - A string key
 - `val` - A value, of any type
-- `ttl` - Owerride the default TTL for this item. If omitted, the default TTL will be used, if exists.
+- `ttlMilliseconds` - Optional. Override the default TTL for this item. If omitted, the default TTL will be used.
 
 Add a new entry to the cache.
 

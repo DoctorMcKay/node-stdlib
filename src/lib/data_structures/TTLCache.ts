@@ -78,7 +78,9 @@ export default class TTLCache<T> {
 	 */
 	#gc(): void {
 		let now = Date.now();
-		this.getKeys().forEach((key) => {
+		// We cannot use getKeys() since that calls #gc() and would cause recursion
+		let keys = [...this.#container.keys()];
+		keys.forEach((key) => {
 			let {expire} = this.#container.get(key);
 			if (expire < now) {
 				this.#container.delete(key);

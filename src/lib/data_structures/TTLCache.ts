@@ -5,11 +5,15 @@ export default class TTLCache<T> {
 	/**
 	 * Construct a new TTLCache.
 	 * @param {int} ttlMilliseconds - Default time to live in milliseconds for each entry
+	 * @param {int} [gcIntervalMilliseconds=300000] - Time between garbage collections (default 1 minute)
 	 * @constructor
 	 */
-	constructor(ttlMilliseconds: number) {
+	constructor(ttlMilliseconds: number, gcIntervalMilliseconds: number = 60000) {
 		this.#container = new Map<string, {value: T, expire: number}>();
 		this.#ttl = ttlMilliseconds;
+
+		// Force a GC every minute
+		setInterval(() => this.#gc(), gcIntervalMilliseconds).unref();
 	}
 
 	/**
@@ -19,8 +23,6 @@ export default class TTLCache<T> {
 	 * @param {int} ttlMilliseconds - Optionally set a TTL for this specific entry, rather than using the default global TTL
 	 */
 	add(key: string, value: T, ttlMilliseconds?: number): void {
-		this.#gc();
-
 		let ttl = ttlMilliseconds || this.#ttl;
 
 		this.#container.set(key, {
@@ -35,7 +37,8 @@ export default class TTLCache<T> {
 	 * @return {null|*} value if present, null if not
 	 */
 	get(key: string): T|null {
-		this.#gc();
+		// Collect garbage on just this key if applicable, to ensure that we don't return an expired value
+		this.#gcKey(key);
 
 		if (!this.#container.has(key)) {
 			return null;
@@ -52,7 +55,6 @@ export default class TTLCache<T> {
 	 */
 	delete(key: string): void {
 		this.#container.delete(key);
-		this.#gc();
 	}
 
 	/**
@@ -77,14 +79,19 @@ export default class TTLCache<T> {
 	 * @private
 	 */
 	#gc(): void {
-		let now = Date.now();
 		// We cannot use getKeys() since that calls #gc() and would cause recursion
 		let keys = [...this.#container.keys()];
-		keys.forEach((key) => {
-			let {expire} = this.#container.get(key);
-			if (expire < now) {
-				this.#container.delete(key);
-			}
-		});
+		keys.forEach(key => this.#gcKey(key));
+	}
+
+	#gcKey(key: string): void {
+		let val = this.#container.get(key);
+		if (!val) {
+			return;
+		}
+
+		if (val.expire < Date.now()) {
+			this.#container.delete(key);
+		}
 	}
 }

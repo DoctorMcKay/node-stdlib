@@ -1,24 +1,32 @@
-export default class TTLCache {
-	private readonly container = new Map<string, any>();
-	private readonly timeouts = new Map<string, any>();
+export default class TTLCache<T> {
+	readonly #container: Map<string, {value: T, expire: number}>;
+	readonly #ttl: number;
 
 	/**
 	 * Construct a new TTLCache.
-	 * @param {int} ttl Time to live in milliseconds for each entry
+	 * @param {int} ttlMilliseconds - Default time to live in milliseconds for each entry
 	 * @constructor
 	 */
-	constructor(private readonly ttl?: number) {}
+	constructor(ttlMilliseconds: number) {
+		this.#container = new Map<string, {value: T, expire: number}>();
+		this.#ttl = ttlMilliseconds;
+	}
 
 	/**
 	 * Add an entry to the cache.
 	 * @param {string} key - The key under which this entry should be stored
-	 * @param {*} val - The value to store in this entry
+	 * @param {any} value - The value to store in this entry
+	 * @param {int} ttlMilliseconds - Optionally set a TTL for this specific entry, rather than using the default global TTL
 	 */
-	add<V>(key: string, val: V, ttl?: number): void {
-		this.container.set(key, val);
+	add(key: string, value: T, ttlMilliseconds?: number): void {
+		this.#gc();
 
-		ttl = ttl || this.ttl;
-		if (ttl) this.timeouts.set(key, setTimeout(() => this.delete(key), ttl).unref());
+		let ttl = ttlMilliseconds || this.#ttl;
+
+		this.#container.set(key, {
+			value,
+			expire: Date.now() + ttl
+		});
 	}
 
 	/**
@@ -26,9 +34,15 @@ export default class TTLCache {
 	 * @param {string} key - The key to retrieve
 	 * @return {null|*} value if present, null if not
 	 */
-	get<V>(key: string): V | null {
-		const value = this.container.get(key);
-		return typeof value !== 'undefined' ? value : null;
+	get(key: string): T|null {
+		this.#gc();
+
+		if (!this.#container.has(key)) {
+			return null;
+		}
+
+		let {value} = this.#container.get(key);
+		return value;
 	}
 
 	/**
@@ -37,12 +51,8 @@ export default class TTLCache {
 	 * @returns {void}
 	 */
 	delete(key: string): void {
-		this.container.delete(key);
-
-		if (this.timeouts.has(key)) {
-			clearTimeout(this.timeouts.get(key));
-			this.timeouts.delete(key);
-		}
+		this.#container.delete(key);
+		this.#gc();
 	}
 
 	/**
@@ -50,7 +60,8 @@ export default class TTLCache {
 	 * @returns {string[]}
 	 */
 	getKeys(): string[] {
-		return [...this.container.keys()];
+		this.#gc();
+		return [...this.#container.keys()];
 	}
 
 	/**
@@ -58,7 +69,20 @@ export default class TTLCache {
 	 * @returns {void}
 	 */
 	clear(): void {
-		this.container.clear();
-		this.timeouts.forEach((timeout) => clearTimeout(timeout));
+		this.#container.clear();
+	}
+
+	/**
+	 * Collect garabge and delete expired entries.
+	 * @private
+	 */
+	#gc(): void {
+		let now = Date.now();
+		this.getKeys().forEach((key) => {
+			let {expire} = this.#container.get(key);
+			if (expire < now) {
+				this.#container.delete(key);
+			}
+		});
 	}
 }

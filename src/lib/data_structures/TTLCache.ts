@@ -14,7 +14,7 @@ export default class TTLCache {
 	 * @param {string} key - The key under which this entry should be stored
 	 * @param {*} val - The value to store in this entry
 	 */
-	add(key: string, val: any, ttl?: number) {
+	add<V>(key: string, val: V, ttl?: number): void {
 		this.container.set(key, val);
 
 		ttl = ttl || this.ttl;
@@ -26,7 +26,7 @@ export default class TTLCache {
 	 * @param {string} key - The key to retrieve
 	 * @return {null|*} value if present, null if not
 	 */
-	get(key: string) {
+	get<V>(key: string): V | null {
 		const value = this.container.get(key);
 		return typeof value !== 'undefined' ? value : null;
 	}
@@ -36,7 +36,7 @@ export default class TTLCache {
 	 * @param {string} key
 	 * @returns {void}
 	 */
-	delete(key: string) {
+	delete(key: string): void {
 		this.container.delete(key);
 
 		if (this.timeouts.has(key)) {
@@ -49,7 +49,7 @@ export default class TTLCache {
 	 * Get a list of all keys in the cache.
 	 * @returns {string[]}
 	 */
-	getKeys() {
+	getKeys(): string[] {
 		return [...this.container.keys()];
 	}
 
@@ -57,7 +57,7 @@ export default class TTLCache {
 	 * Clear the cache.
 	 * @returns {void}
 	 */
-	clear() {
+	clear(): void {
 		this.container.clear();
 		this.timeouts.forEach((timeout) => clearTimeout(timeout));
 	}

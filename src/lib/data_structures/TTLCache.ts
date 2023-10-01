@@ -59,6 +59,6 @@ export default class TTLCache {
    */
 	clear() {
 		this.container.clear();
-    this.timeouts.forEach(timeout => clearTimeout(timeout));
+    this.timeouts.forEach((timeout) => clearTimeout(timeout));
 	}
 }

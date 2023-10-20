@@ -77,7 +77,7 @@ export default function getProxyAgent(secure: boolean, proxyUrl: string, proxyTi
 			let tlsSocket:TLSSocket = tlsConnect(tlsOptions, () => {
 				tlsSocket.removeListener('error', onTlsError); // we don't want to intercept errors later on
 
-				if (!tlsSocket.authorized && tlsOptions.rejectUnauthorized !== false) {
+				if (!tlsSocket.authorized && tlsOptions.rejectUnauthorized !== false && process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0') {
 					// Checking this isn't strictly necessary as all versions of Node since 2013 won't call this callback in this case
 					// (or perhaps all versions of node ever that have TLSSocket?)
 					callback(tlsSocket.authorizationError || new Error('Secure connection failed'));

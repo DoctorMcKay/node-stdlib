@@ -25,6 +25,7 @@ const REDIRECT_STATUS_CODES = [301, 302, 303, 307, 308];
 
 export default class HttpClient extends EventEmitter {
 	cookieJar?: CookieJar;
+	userAgent?: string;
 
 	#httpAgent: HttpAgent;
 	#httpsAgent: HttpsAgent;
@@ -38,10 +39,11 @@ export default class HttpClient extends EventEmitter {
 
 		options = options || {};
 
+		this.userAgent = options.userAgent;
 		this.#httpAgent = options.httpAgent || new HttpAgent({keepAlive: true});
 		this.#httpsAgent = options.httpsAgent || new HttpsAgent({keepAlive: true});
 		this.#localAddress = options.localAddress;
-		this.#defaultHeaders = options.defaultHeaders || {};
+		this.#defaultHeaders = normalizeHeadersObject(options.defaultHeaders || {});
 		this.#defaultTimeout = options.defaultTimeout || 0;
 		this.#gzip = options.gzip !== false;
 
@@ -160,7 +162,11 @@ export default class HttpClient extends EventEmitter {
 		nodeOptions.method = options.method;
 		nodeOptions.agent = url.protocol == 'http:' ? this.#httpAgent : this.#httpsAgent;
 		nodeOptions.localAddress = this.#localAddress;
-		nodeOptions.headers = {...this.#defaultHeaders, ...(options.headers || {})};
+		nodeOptions.headers = {
+			...({'user-agent': this.userAgent}),
+			...this.#defaultHeaders,
+			...(options.headers || {})
+		};
 
 		if (this.cookieJar) {
 			let cookieHeaderValue = this.cookieJar.getCookieHeaderForUrl(options.url);
@@ -172,6 +178,13 @@ export default class HttpClient extends EventEmitter {
 
 		if (this.#gzip) {
 			nodeOptions.headers['accept-encoding'] = 'gzip';
+		}
+
+		for (let i in nodeOptions.headers) {
+			// remove undefined values from headers
+			if (typeof nodeOptions.headers[i] == 'undefined') {
+				delete nodeOptions.headers[i];
+			}
 		}
 
 		return nodeOptions;
@@ -202,17 +215,7 @@ export function preProcessOptions(options: HttpRequestOptions): HttpRequestOptio
 	options.headers = options.headers || {};
 
 	// lowercase all the header names
-	let normalizedHeaders:{[name: string]: any} = {};
-	for (let i in options.headers) {
-		let nameLower = i.toLowerCase();
-		if (normalizedHeaders[nameLower]) {
-			throw new Error(`Header "${nameLower}" appears in the headers object multiple times, with different capitalization`);
-		}
-
-		normalizedHeaders[nameLower] = options.headers[i];
-	}
-
-	options.headers = normalizedHeaders;
+	options.headers = normalizeHeadersObject(options.headers);
 
 	// Only 1 body type may be specified. If more than 1 is present, that's an error.
 	if (BODY_TYPES.filter(bt => typeof options[bt] != 'undefined').length > 1) {
@@ -286,4 +289,20 @@ function buildUrl(urlObj: any): string {
 		(urlObj.protocol == 'https:' && urlObj.port != 443);
 
 	return `${urlObj.protocol}//${urlObj.host}${portAppend ? `:${urlObj.port}` : ''}${urlObj.path}`;
+}
+
+function normalizeHeadersObject(headersObj: {[name: string]: any}): {[name: string]: any} {
+	headersObj = headersObj || {};
+
+	let normalizedHeaders:{[name: string]: any} = {};
+	for (let i in headersObj) {
+		let nameLower = i.toLowerCase();
+		if (normalizedHeaders[nameLower]) {
+			throw new Error(`Header "${nameLower}" appears in the headers object multiple times, with different capitalization`);
+		}
+
+		normalizedHeaders[nameLower] = headersObj[i];
+	}
+
+	return normalizedHeaders;
 }

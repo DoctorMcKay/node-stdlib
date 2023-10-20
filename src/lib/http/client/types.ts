@@ -3,6 +3,7 @@ import {Agent as HttpsAgent} from 'https';
 import CookieJar from './CookieJar';
 
 export interface HttpClientOptions {
+	userAgent?: string;
 	httpAgent?: HttpAgent;
 	httpsAgent?: HttpsAgent;
 	localAddress?: string;

@@ -1,3 +1,7 @@
+// This import isn't necessary for Node.js, but it is for Electron.
+// Ref: https://dev.doctormckay.com/topic/4606-typeerror-setintervalunref-is-not-a-function/
+import {setInterval} from 'timers';
+
 export default class TTLCache<T> {
 	readonly #container: Map<string, {value: T, expire: number}>;
 	readonly #ttl: number;

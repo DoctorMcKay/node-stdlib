@@ -11,6 +11,7 @@ export interface HttpClientOptions {
 	defaultTimeout?: number;
 	cookieJar?: CookieJar|boolean;
 	gzip?: boolean;
+	http2?: boolean;
 }
 
 export interface HttpRequestOptions {
@@ -36,6 +37,7 @@ export interface MultipartFormObject {
 }
 
 export interface HttpResponse {
+	httpVersion?: string;
 	statusCode: number;
 	statusMessage: string;
 	url: string; // for detecting destination after a redirect

@@ -1,15 +1,16 @@
+import {randomBytes} from 'crypto';
 import {EventEmitter} from 'events';
 import {request as httpRequest, Agent as HttpAgent, RequestOptions as NodeRequestOptions} from 'http';
 import {request as httpsRequest, Agent as HttpsAgent} from 'https';
 import {stringify as encodeQueryString} from 'querystring';
+import {Readable} from 'stream';
 import {createGunzip} from 'zlib';
 
 import {HttpClientOptions, HttpRequestOptions, HttpResponse, MultipartFormObject} from './types';
 import {clone} from '../../../objects';
 import {timeoutPromise} from '../../../promises';
 import CookieJar from './CookieJar';
-import {Readable} from 'stream';
-import {randomBytes} from 'crypto';
+import {ConnectionManager} from './connections/ConnectionManager';
 
 const BODY_TYPES = ['body', 'urlEncodedForm', 'multipartForm', 'json'];
 const METHODS_WITHOUT_BODY = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
@@ -34,6 +35,9 @@ export default class HttpClient extends EventEmitter {
 	#defaultTimeout: number;
 	#gzip: boolean;
 
+	#http2: boolean;
+	#connectionManager: ConnectionManager|undefined;
+
 	constructor(options?: HttpClientOptions) {
 		super();
 
@@ -46,9 +50,19 @@ export default class HttpClient extends EventEmitter {
 		this.#defaultHeaders = normalizeHeadersObject(options.defaultHeaders || {});
 		this.#defaultTimeout = options.defaultTimeout || 0;
 		this.#gzip = options.gzip !== false;
+		this.#http2 = false;
 
 		if (options.cookieJar) {
 			this.cookieJar = options.cookieJar === true ? new CookieJar() : options.cookieJar;
+		}
+
+		if (options.http2) {
+			this.#http2 = true;
+			this.#connectionManager = new ConnectionManager();
+
+			if (options.httpAgent || options.httpsAgent) {
+				throw new Error('Cannot enable HTTP/2 support and also pass a custom httpAgent or httpsAgent');
+			}
 		}
 	}
 
@@ -77,6 +91,7 @@ export default class HttpClient extends EventEmitter {
 				responseStream.on('data', chunk => bodyChunks.push(chunk));
 				responseStream.on('end', () => {
 					let response:HttpResponse = {
+						httpVersion: res.httpVersion,
 						statusCode: res.statusCode,
 						statusMessage: res.statusMessage,
 						url: buildUrl(nodeOptions),

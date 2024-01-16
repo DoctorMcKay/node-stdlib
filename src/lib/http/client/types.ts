@@ -27,6 +27,7 @@ export interface HttpRequestOptions {
 
 	followRedirects?: boolean;
 	timeout?: number;
+	rejectUnauthorized?: boolean;
 }
 
 export interface MultipartFormObject {

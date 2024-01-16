@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
-import {request as httpRequest, Agent as HttpAgent, RequestOptions as NodeRequestOptions} from 'http';
-import {request as httpsRequest, Agent as HttpsAgent} from 'https';
+import {request as httpRequest, Agent as HttpAgent} from 'http';
+import {request as httpsRequest, Agent as HttpsAgent, RequestOptions as NodeRequestOptions} from 'https';
 import {stringify as encodeQueryString} from 'querystring';
 import {createGunzip} from 'zlib';
 
@@ -178,6 +178,10 @@ export default class HttpClient extends EventEmitter {
 
 		if (this.#gzip) {
 			nodeOptions.headers['accept-encoding'] = 'gzip';
+		}
+
+		if (typeof options.rejectUnauthorized == 'boolean') {
+			nodeOptions.rejectUnauthorized = options.rejectUnauthorized;
 		}
 
 		for (let i in nodeOptions.headers) {
